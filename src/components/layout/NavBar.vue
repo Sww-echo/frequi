@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Favico from 'favico.js';
+import { useI18n } from 'vue-i18n';
 
 import type { AuthStorageWithBotId } from '@/types';
 import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
@@ -15,6 +16,7 @@ const router = useRouter();
 const favicon = ref<Favico | undefined>(undefined);
 const pingInterval = ref<number>();
 const loginDialog = useLoginDialog();
+const { t } = useI18n();
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 
@@ -105,46 +107,46 @@ type NavItem = NavigationMenuItem & { visible?: boolean; mobileOnly?: boolean };
 
 const navItems = computed<NavItem[]>(() => [
   {
-    label: 'Trade',
+    label: t('nav.trade'),
     to: '/trade',
     visible: !botStore.canRunBacktest,
     icon: 'i-mdi-currency-usd',
   },
   {
-    label: 'Dashboard',
+    label: t('nav.dashboard'),
     to: '/dashboard',
     visible: !botStore.canRunBacktest,
     icon: 'i-mdi-view-dashboard',
   },
   {
-    label: 'Chart',
+    label: t('nav.chart'),
     to: '/graph',
     icon: 'i-mdi-chart-line',
   },
   {
-    label: 'Logs',
+    label: t('nav.logs'),
     to: '/logs',
     icon: 'i-mdi-format-list-bulleted',
   },
   {
-    label: 'Settings',
+    label: t('common.settings'),
     to: '/settings',
     mobileOnly: true,
     icon: 'i-mdi-cog',
   },
   {
-    label: 'Backtest',
+    label: t('nav.backtest'),
     to: '/backtest',
     visible: botStore.canRunBacktest,
     icon: 'i-mdi-currency-usd',
   },
   {
-    label: 'Analysis',
+    label: t('nav.analysis'),
     visible: botStore.canRunBacktest,
     icon: 'mdi:chart-timeline-variant-shimmer',
     children: [
       {
-        label: 'Recursive Analysis',
+        label: t('nav.recursiveAnalysis'),
         to: '/recursive_analysis',
         icon: 'i-mdi-magnify-scan',
         visible:
@@ -152,7 +154,7 @@ const navItems = computed<NavItem[]>(() => [
           botStore.activeBot.botFeatures.recursiveAnalysis,
       },
       {
-        label: 'Lookahead Analysis',
+        label: t('nav.lookaheadAnalysis'),
         to: '/lookahead_analysis',
         icon: 'i-mdi-chart-timeline-variant-shimmer',
         visible:
@@ -162,13 +164,13 @@ const navItems = computed<NavItem[]>(() => [
     ],
   },
   {
-    label: 'Download Data',
+    label: t('nav.downloadData'),
     to: '/download_data',
     visible: botStore.isWebserverMode && botStore.activeBot.botFeatures.downloadDataView,
     icon: 'i-mdi-download',
   },
   {
-    label: 'Pairlist Config',
+    label: t('nav.pairlistConfig'),
     to: '/pairlist_config',
     icon: 'i-mdi-format-list-numbered-rtl',
     visible:
@@ -183,25 +185,25 @@ const nonMobileNavItems = computed(() => visibleNavItems.value.filter((item) => 
 const menuItems = computed<DropdownMenuItem[][]>(() => [
   [
     {
-      label: `V: ${settingsStore.uiVersion}`,
+      label: `${t('common.version')}: ${settingsStore.uiVersion}`,
       disabled: true,
     },
   ],
   [
     {
-      label: 'Settings',
+      label: t('common.settings'),
       icon: 'i-mdi-cog',
       onSelect: () => router.push('/settings'),
     },
     {
-      label: layoutStore.layoutLocked ? 'Unlock Layout' : 'Lock Layout',
+      label: layoutStore.layoutLocked ? t('nav.unlockLayout') : t('nav.lockLayout'),
       icon: layoutStore.layoutLocked ? 'i-mdi-lock' : 'i-mdi-lock-open',
       onSelect: () => {
         layoutStore.layoutLocked = !layoutStore.layoutLocked;
       },
     },
     {
-      label: 'Reset Layout',
+      label: t('nav.resetLayout'),
       icon: 'i-mdi-lock-reset',
       onSelect: resetDynamicLayout,
     },
@@ -210,7 +212,7 @@ const menuItems = computed<DropdownMenuItem[][]>(() => [
     ? [
         [
           {
-            label: 'Logout',
+            label: t('common.logout'),
             icon: 'i-mdi-logout',
             onSelect: clickLogout,
           },
@@ -222,7 +224,7 @@ const menuItems = computed<DropdownMenuItem[][]>(() => [
 function editBotLogin(botId: string) {
   const bot = botStore.botStores[botId];
   if (!bot) {
-    showAlert('Bot not found', 'warning');
+    showAlert(t('alerts.botNotFound'), 'warning');
     return;
   }
   const loginInfo: AuthStorageWithBotId = {
@@ -252,7 +254,10 @@ function editBotLogin(botId: string) {
               link: 'text-md',
             }"
           />
-          <ThemeSelect />
+          <div class="flex items-center gap-2">
+            <LanguageSelect />
+            <ThemeSelect />
+          </div>
         </div>
 
         <!-- Right aligned nav items -->
@@ -261,14 +266,14 @@ function editBotLogin(botId: string) {
           <div
             v-if="!settingsStore.confirmDialog"
             class="my-auto me-5 flex text-yellow-300"
-            title="Confirm dialog deactivated, Forced exits will be executed immediately. Be careful."
+            :title="$t('settings.confirmExitHint')"
           >
             <i-mdi-run-fast />
             <i-mdi-alert />
           </div>
           <div class="hidden md:flex md:flex-nowrap items-center nav-item me-2">
-            <span class="text-sm me-2" title="Bot name">
-              {{ (botStore.activeBot && botStore.activeBot.botName) || 'No bot selected' }}
+            <span class="text-sm me-2" :title="$t('common.botName')">
+              {{ (botStore.activeBot && botStore.activeBot.botName) || $t('common.noBotSelected') }}
             </span>
             <BotEntry
               v-if="botStore.selectedBotObj"
@@ -279,7 +284,7 @@ function editBotLogin(botId: string) {
             />
             <BotSelect />
 
-            <ReloadControl class="me-3" title="Confirm Dialog deactivated." />
+            <ReloadControl class="me-3" :title="$t('settings.confirmExit')" />
           </div>
           <div v-if="botStore.hasBots" class="flex items-center">
             <!-- Hide dropdown on xs, instead show below  -->
@@ -296,7 +301,7 @@ function editBotLogin(botId: string) {
             color="neutral"
             @click="loginDialog({})"
             icon="mdi:login"
-            >Login
+            >{{ $t('common.login') }}
           </UButton>
         </div>
 
@@ -310,7 +315,13 @@ function editBotLogin(botId: string) {
               class: 'rounded-full',
             }"
           >
-            <UButton class="text-neutral-300 text-xl" size="xl" variant="ghost" icon="mdi:menu" />
+            <UButton
+              class="text-neutral-300 text-xl"
+              size="xl"
+              variant="ghost"
+              icon="mdi:menu"
+              :aria-label="$t('nav.mobileMenu')"
+            />
             <template #title>
               <div class="flex flex-row items-center gap-2">
                 <AppIcon class="h-9 w-9" />
@@ -326,15 +337,19 @@ function editBotLogin(botId: string) {
                   orientation="vertical"
                 />
                 <USeparator class="my-2" />
-                <span>Version: {{ settingsStore.uiVersion }}</span>
+                <span>{{ $t('common.version') }}: {{ settingsStore.uiVersion }}</span>
 
                 <div class="flex flex-row items-center justify-center">
+                  <LanguageSelect show-text />
                   <ThemeSelect show-text />
                 </div>
                 <USeparator class="my-2" />
                 <div class="flex flex-row items-center">
-                  <span class="text-sm me-2" title="Bot name">
-                    {{ (botStore.activeBot && botStore.activeBot.botName) || 'No bot selected' }}
+                  <span class="text-sm me-2" :title="$t('common.botName')">
+                    {{
+                      (botStore.activeBot && botStore.activeBot.botName) ||
+                      $t('common.noBotSelected')
+                    }}
                   </span>
                   <BotEntry
                     v-if="botStore.selectedBotObj"
