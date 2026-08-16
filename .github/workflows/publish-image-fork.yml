@@ -53,7 +53,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/frequi:latest
-            ghcr.io/${{ github.repository_owner }}/frequi:${{ github.sha }}
+            ghcr.io/sww-echo/frequi:latest
+            ghcr.io/sww-echo/frequi:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
