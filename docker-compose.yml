@@ -1,10 +1,7 @@
 ---
 services:
   frequi:
-    build:
-      context: .
-      dockerfile: "./Dockerfile"
-    image: sww-echo-frequi:zh-cn
+    image: ghcr.io/sww-echo/frequi:latest
     restart: unless-stopped
     ports:
       - "127.0.0.1:3001:80"
