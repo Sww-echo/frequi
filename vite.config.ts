@@ -65,7 +65,7 @@ export default defineConfig({
         },
       },
       autoImport: {
-        imports: ['vue', 'vue-router', '@vueuse/core', 'pinia'],
+        imports: ['vue', 'vue-router', '@vueuse/core', 'pinia', 'vue-i18n'],
         dts: 'src/auto-imports.d.ts',
         dirs: ['src/composables', 'src/stores', 'src/utils/**'],
         vueTemplate: true,

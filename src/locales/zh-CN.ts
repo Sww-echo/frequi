@@ -181,6 +181,11 @@ export default {
     leverageHint:
       '适用于所有策略的新合约开仓，仍受交易所最大杠杆限制；重新加载配置后运行时设置可能恢复。',
     leverageInvalid: '杠杆必须至少为 1 倍。',
+    shortEnabledTitle: '修改自动做空开关',
+    shortEnabledMessage: '此设置决定所有策略是否允许新开空单，已有仓位不会改变。确定继续吗？',
+    shortEnabledLabel: '自动做空',
+    shortEnabledOn: '已开启',
+    shortEnabledOff: '已关闭',
   },
   alerts: {
     botNotFound: '未找到机器人',
@@ -386,7 +391,6 @@ export default {
     profit: '收益',
     absoluteProfit: '绝对收益',
     relativeProfit: '相对收益',
-    tradeCount: '交易数量',
     projectedProfit: '预计收益（含未实现收益）',
     candles: 'K 线',
     volume: '成交量',
@@ -478,7 +482,8 @@ export default {
     evaluationEmpty: '评估结果为 0 个交易对',
     evaluationFailed: '评估失败',
     invalidTitle: '配置无效',
-    invalidDescription: '交易对列表的第一个条目必须是生成型列表，例如 StaticPairList 或 VolumePairList。',
+    invalidDescription:
+      '交易对列表的第一个条目必须是生成型列表，例如 StaticPairList 或 VolumePairList。',
     dragHere: '将交易对列表拖到这里',
     config: '配置',
     results: '结果',
@@ -507,14 +512,17 @@ export default {
     noRecursiveDescription: '调整启动 K 线数量时，策略指标均未发生变化。',
     indicatorDifference: '以下数值显示了相对于分析基线的百分比差异。',
     recursiveHint: '输入以逗号分隔的启动 K 线数量进行相互比较。',
-    recursiveLongDescription: '通过比较不同启动 K 线数量下计算的指标值，检查策略指标是否存在递归公式问题。存在差异的指标可能受启动数据量影响，并可能在回测与模拟/实盘运行中产生不一致结果。',
+    recursiveLongDescription:
+      '通过比较不同启动 K 线数量下计算的指标值，检查策略指标是否存在递归公式问题。存在差异的指标可能受启动数据量影响，并可能在回测与模拟/实盘运行中产生不一致结果。',
     minimumTradeHint: '分析在评估偏差前至少应运行的交易数量。',
     targetedTradeHint: '分析尝试达到的目标交易数量，必须大于或等于最小交易数量。',
     limitOrdersHint: '允许前瞻分析使用限价订单（可能导致前瞻分析结果出现误报）。',
-    lookaheadLongDescription: '通过比较完整数据集与逐步缩短时间范围生成的信号，检查策略是否存在前瞻偏差。依赖未来数据而变化的指标或信号会导致回测结果不可靠。',
+    lookaheadLongDescription:
+      '通过比较完整数据集与逐步缩短时间范围生成的信号，检查策略是否存在前瞻偏差。依赖未来数据而变化的指标或信号会导致回测结果不可靠。',
     indicator: '指标',
     affectedIndicators: '有 {count} 个指标受启动 K 线数量影响',
-    recursiveResultHint: '以下数值显示了相对于使用最多启动 K 线数量的分析结果的百分比差异。非零值表示存在递归公式问题。',
+    recursiveResultHint:
+      '以下数值显示了相对于使用最多启动 K 线数量的分析结果的百分比差异。非零值表示存在递归公式问题。',
     hasBias: '存在偏差',
     totalSignals: '信号总数',
     biasedEntrySignals: '偏差开仓信号',

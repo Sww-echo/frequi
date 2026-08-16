@@ -141,6 +141,7 @@ export interface BotState {
   trading_mode?: TradingMode;
   margin_mode?: MarginMode;
   leverage?: number;
+  short_enabled?: boolean;
   short_allowed?: boolean;
   state: BotStates;
   runmode: RunModes;

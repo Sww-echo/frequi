@@ -76,7 +76,7 @@ import { i18n } from '@/locales';
 import { evaluateFeatures } from '@/utils/features';
 
 function translate(key: string, params?: Record<string, unknown>) {
-  return i18n.global.t(key, params);
+  return i18n.global.t(key, params ?? {});
 }
 
 export function createBotSubStore(botId: string, botName: string) {
@@ -1038,11 +1038,33 @@ export function createBotSubStore(botId: string, botName: string) {
       }
     }
 
+    async function setShortEnabled(enabled: boolean) {
+      try {
+        const res = await api.post<{ enabled: boolean }, AxiosResponse<StatusResponse>>(
+          '/short_enabled',
+          { enabled },
+        );
+        if (botState.value) {
+          botState.value.short_enabled = enabled;
+        }
+        showAlert(res.data.status);
+        return Promise.resolve(res);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(error.response);
+        }
+        showAlert('Error setting short-entry state.', 'error');
+        return Promise.reject(error);
+      }
+    }
+
     async function deleteTrade(tradeid: string) {
       try {
         const res = await api.delete<DeleteTradeResponse>(`/trades/${tradeid}`);
         showAlert(
-          res.data.result_msg ? res.data.result_msg : translate('alerts.tradeDeleted', { id: tradeid }),
+          res.data.result_msg
+            ? res.data.result_msg
+            : translate('alerts.tradeDeleted', { id: tradeid }),
         );
         return Promise.resolve(res);
       } catch (error) {
@@ -1674,6 +1696,7 @@ export function createBotSubStore(botId: string, botName: string) {
       stopBuy,
       reloadConfig,
       setLeverage,
+      setShortEnabled,
       deleteTrade,
       cancelOpenOrder,
       reloadTrade,

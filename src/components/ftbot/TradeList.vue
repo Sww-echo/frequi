@@ -5,6 +5,8 @@ import type { MultiDeletePayload, MultiForceExitPayload, Trade } from '@/types';
 
 import { useRouter } from 'vue-router';
 
+const { t } = useI18n();
+
 const props = withDefaults(
   defineProps<{
     trades: Trade[];

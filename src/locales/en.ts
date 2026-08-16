@@ -102,7 +102,8 @@ export default {
       'Closed trades for all selected bots. Click on a trade to go to the trade page for that trade/bot.',
     profitDistribution: 'Profit Distribution',
     tradesLog: 'Trades Log',
-    singleBotAbsoluteProfit: 'Time period chart is only available when a single bot is selected and showing absolute profit.',
+    singleBotAbsoluteProfit:
+      'Time period chart is only available when a single bot is selected and showing absolute profit.',
   },
   balance: {
     botBalance: 'Bot Balance',
@@ -191,6 +192,12 @@ export default {
     leverageHint:
       'Applies to all strategies and new futures entries. The exchange maximum still applies; reload config may reset this runtime value.',
     leverageInvalid: 'Leverage must be at least 1x.',
+    shortEnabledTitle: 'Change automatic short entries',
+    shortEnabledMessage:
+      'This changes whether all strategies may open new short positions. Existing positions are unchanged. Continue?',
+    shortEnabledLabel: 'Automatic shorts',
+    shortEnabledOn: 'Enabled',
+    shortEnabledOff: 'Disabled',
   },
   alerts: {
     botNotFound: 'Bot not found',
@@ -308,7 +315,8 @@ export default {
     price: 'Price',
     detail: {
       general: 'General',
-      atRiskHelp: 'The amount at risk based on the stake amount. This is how much you would lose if the stoploss is hit.',
+      atRiskHelp:
+        'The amount at risk based on the stake amount. This is how much you would lose if the stoploss is hit.',
       orders: 'Orders',
       remaining: 'Remaining',
       showCustomData: 'Show custom data',
@@ -341,7 +349,8 @@ export default {
       futuresMargin: 'Futures/Margin',
       direction: 'Direction',
       fundingFees: 'Funding fees',
-      fundingHelp: 'Positive funding_fees -> Trade has gained from fees. Negative funding_fees -> Trade had to pay the fees.',
+      fundingHelp:
+        'Positive funding_fees -> Trade has gained from fees. Negative funding_fees -> Trade had to pay the fees.',
       interestRate: 'Interest rate',
       liquidationPrice: 'Liquidation Price',
       filled: 'Filled',
@@ -366,7 +375,8 @@ export default {
     parameters: 'Backtesting parameters',
     timeframe: 'Timeframe:',
     detailTimeframe: 'Detail Timeframe:',
-    detailTimeframeHint: 'Detail timeframe, to simulate intra-candle results. Not setting this will not use this functionality.',
+    detailTimeframeHint:
+      'Detail timeframe, to simulate intra-candle results. Not setting this will not use this functionality.',
     maxOpenTrades: 'Max open trades:',
     startingCapital: 'Starting capital:',
     stakeAmount: 'Stake amount:',
@@ -380,7 +390,8 @@ export default {
     loadResult: 'Load backtest result',
     stop: 'Stop Backtest',
     reset: 'Reset Backtest',
-    historicDescription: 'Load historic results from disk. You can click on multiple results to load all of them into FreqUI.',
+    historicDescription:
+      'Load historic results from disk. You can click on multiple results to load all of them into FreqUI.',
     filterResults: 'Filter results',
     details: 'Details',
     time: 'Backtest Time',
@@ -396,7 +407,6 @@ export default {
     profit: 'Profit',
     absoluteProfit: 'Absolute profit',
     relativeProfit: 'Relative profit',
-    tradeCount: 'Trade Count',
     projectedProfit: 'Projected profit (incl. unrealized)',
     candles: 'Candles',
     volume: 'Volume',
@@ -434,19 +444,22 @@ export default {
     pairsFromTemplate: 'Pairs from template',
     pair: 'Pair',
     addFromPairlist: 'Use pairs from Pairlist Config',
-    addFromPairlistHint: 'Add all pairs from Pairlist Config - requires the pairlist config to have run first.',
+    addFromPairlistHint:
+      'Add all pairs from Pairlist Config - requires the pairlist config to have run first.',
     selectTimeframes: 'Select timeframes',
     timeframe: 'Timeframe',
     timeSelection: 'Time Selection',
     customTimerange: 'Use custom timerange',
     days: 'Days to download:',
     advanced: 'Advanced options',
-    advancedHint: 'Advanced options (Erase data, Download trades, and Custom Exchange settings) will only apply when using the download command.',
+    advancedHint:
+      'Advanced options (Erase data, Download trades, and Custom Exchange settings) will only apply when using the download command.',
     erase: 'Erase existing data',
     prepend: 'Prepend data when downloading',
     downloadTrades: 'Download Trades instead of OHLCV data',
     candleTypes: 'Select Candle Types',
-    candleHint: 'When no candle-type is selected, freqtrade will download the necessary candle types.',
+    candleHint:
+      'When no candle-type is selected, freqtrade will download the necessary candle types.',
     customExchange: 'Custom Exchange',
     start: 'Start Download',
     spot: 'Spot',
@@ -479,7 +492,8 @@ export default {
     add: 'Add',
     unavailable: 'List unavailable. Please log in and make sure the server is running.',
     noBlacklist: 'No blacklist available.',
-    noBlacklistHint: 'If you expect to have pairs in your blacklist, please log in and make sure the server is running.',
+    noBlacklistHint:
+      'If you expect to have pairs in your blacklist, please log in and make sure the server is running.',
     selectBlacklist: "Blacklist - Select (followed by a click on '-') to remove pairs",
     selectDelete: 'Select pairs to delete pairs from your blacklist.',
     pairCount: '{count} pairs',
@@ -488,16 +502,19 @@ export default {
     evaluationEmpty: 'Evaluation returned 0 pairs',
     evaluationFailed: 'Evaluation failed',
     invalidTitle: 'Invalid configuration',
-    invalidDescription: 'The first entry in the pairlist must be a Generating pairlist, like StaticPairList or VolumePairList.',
+    invalidDescription:
+      'The first entry in the pairlist must be a Generating pairlist, like StaticPairList or VolumePairList.',
     dragHere: 'Drag pairlist here',
     config: 'Config',
     results: 'Results',
   },
   analysis: {
     recursive: 'Recursive analysis',
-    recursiveDescription: "Checks your strategy's indicators for recursive formula issues by comparing results with different startup candle counts.",
+    recursiveDescription:
+      "Checks your strategy's indicators for recursive formula issues by comparing results with different startup candle counts.",
     lookahead: 'Lookahead analysis',
-    lookaheadDescription: 'Checks your strategy for lookahead bias by comparing signals generated on different timeranges.',
+    lookaheadDescription:
+      'Checks your strategy for lookahead bias by comparing signals generated on different timeranges.',
     strategy: 'Strategy',
     timeframe: 'Timeframe:',
     startupCandles: 'Startup candle counts:',
@@ -510,21 +527,30 @@ export default {
     noBiasTitle: 'No lookahead bias detected',
     noBiasDescription: 'The strategy produced consistent signals across the analyzed timeranges.',
     biasTitle: 'Lookahead bias detected',
-    biasDescription: 'The strategy produced different signals depending on the available data. Backtest results may be unreliable.',
+    biasDescription:
+      'The strategy produced different signals depending on the available data. Backtest results may be unreliable.',
     strategyLabel: 'Strategy:',
     recommendedStartup: 'Recommended startup candle count:',
     noRecursiveTitle: 'No recursive formula issues detected',
-    noRecursiveDescription: 'None of the strategy indicators changed when varying the startup candle count.',
-    indicatorDifference: 'The values below show the percentage difference compared to the analysis baseline.',
-    recursiveHint: "Comma separated list of startup candle counts to compare against each other.",
-    recursiveLongDescription: "Checks your strategy's indicators for recursive formula issues by comparing indicator values calculated with different startup candle counts. Indicators that show a difference are likely affected by the amount of startup data and may produce inconsistent results between backtesting and dry/live runs.",
-    minimumTradeHint: 'Minimum number of trades the analysis should run for before evaluating bias.',
-    targetedTradeHint: 'Targeted number of trades the analysis tries to reach. Must be greater than or equal to the minimum trade amount.',
-    limitOrdersHint: 'Allow limit orders in lookahead analysis (could cause false positives in lookahead analysis results).',
-    lookaheadLongDescription: 'Checks your strategy for lookahead bias by comparing signals generated on the full dataset against signals generated on progressively shorter timeranges. Indicators or signals that change depending on future data indicate a lookahead bias that will make backtest results unreliable.',
+    noRecursiveDescription:
+      'None of the strategy indicators changed when varying the startup candle count.',
+    indicatorDifference:
+      'The values below show the percentage difference compared to the analysis baseline.',
+    recursiveHint: 'Comma separated list of startup candle counts to compare against each other.',
+    recursiveLongDescription:
+      "Checks your strategy's indicators for recursive formula issues by comparing indicator values calculated with different startup candle counts. Indicators that show a difference are likely affected by the amount of startup data and may produce inconsistent results between backtesting and dry/live runs.",
+    minimumTradeHint:
+      'Minimum number of trades the analysis should run for before evaluating bias.',
+    targetedTradeHint:
+      'Targeted number of trades the analysis tries to reach. Must be greater than or equal to the minimum trade amount.',
+    limitOrdersHint:
+      'Allow limit orders in lookahead analysis (could cause false positives in lookahead analysis results).',
+    lookaheadLongDescription:
+      'Checks your strategy for lookahead bias by comparing signals generated on the full dataset against signals generated on progressively shorter timeranges. Indicators or signals that change depending on future data indicate a lookahead bias that will make backtest results unreliable.',
     indicator: 'Indicator',
     affectedIndicators: '{count} indicator(s) affected by startup candle count',
-    recursiveResultHint: 'The values below show the percentage difference compared to the analysis with the most startup candles. Non-zero values indicate a recursive formula issue.',
+    recursiveResultHint:
+      'The values below show the percentage difference compared to the analysis with the most startup candles. Non-zero values indicate a recursive formula issue.',
     hasBias: 'Has bias',
     totalSignals: 'Total signals',
     biasedEntrySignals: 'Biased entry signals',
@@ -539,12 +565,14 @@ export default {
   },
   chart: {
     settings: 'Settings',
-    settingsHint: "These settings only apply to the chart view and do not affect the bot's actual configuration or behavior.",
+    settingsHint:
+      "These settings only apply to the chart view and do not affect the bot's actual configuration or behavior.",
     customExchange: 'Custom Exchange',
     currentExchange: 'Current Exchange:',
     strategy: 'Strategy',
     liveData: 'Use Live Data',
-    liveDataHint: "Use live data from the exchange. Only use if you don't have data downloaded locally.",
+    liveDataHint:
+      "Use live data from the exchange. Only use if you don't have data downloaded locally.",
     timeframe: 'Timeframe',
     selectPairs: 'Select pairs to plot',
     refresh: 'Refresh chart',
@@ -616,7 +644,8 @@ export default {
     captureStart: 'Capture start',
     walletBalance: 'Wallet Balance',
     noWalletData: 'No historic wallet data available.',
-    walletDataHint: 'You may need to update your freqtrade version to have historic wallet balance data available.',
+    walletDataHint:
+      'You may need to update your freqtrade version to have historic wallet balance data available.',
     profit: 'Profit',
     bins: 'Bins',
     notLoaded: 'Not loaded yet.',
