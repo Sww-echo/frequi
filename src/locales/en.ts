@@ -147,6 +147,14 @@ export default {
     reloadMessage: 'Reload configuration (including strategy)?',
     forceExitTitle: 'Force Exit All',
     forceExitMessage: 'Really force exit ALL trades?',
+    leverageTitle: 'Change global leverage',
+    leverageMessage:
+      'This changes leverage for new futures entries only. Existing positions are unchanged. Continue?',
+    leverageLabel: 'Global leverage',
+    leverageApply: 'Apply leverage',
+    leverageHint:
+      'Applies to all strategies and new futures entries. The exchange maximum still applies; reload config may reset this runtime value.',
+    leverageInvalid: 'Leverage must be at least 1x.',
   },
   alerts: {
     botNotFound: 'Bot not found',

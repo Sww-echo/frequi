@@ -138,6 +138,13 @@ export default {
     reloadMessage: '确定重新加载配置（包括策略）吗？',
     forceExitTitle: '强制退出全部交易',
     forceExitMessage: '确定强制退出全部交易吗？',
+    leverageTitle: '修改全局杠杆',
+    leverageMessage: '此设置只影响新开的合约仓位，已有仓位不会改变。确定继续吗？',
+    leverageLabel: '全局杠杆',
+    leverageApply: '应用杠杆',
+    leverageHint:
+      '适用于所有策略的新合约开仓，仍受交易所最大杠杆限制；重新加载配置后运行时设置可能恢复。',
+    leverageInvalid: '杠杆必须至少为 1 倍。',
   },
   alerts: {
     botNotFound: '未找到机器人',

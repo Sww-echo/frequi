@@ -1013,6 +1013,26 @@ export function createBotSubStore(botId: string, botName: string) {
       }
     }
 
+    async function setLeverage(leverage: number) {
+      try {
+        const res = await api.post<{ leverage: number }, AxiosResponse<StatusResponse>>(
+          '/leverage',
+          { leverage },
+        );
+        if (botState.value) {
+          botState.value.leverage = leverage;
+        }
+        showAlert(res.data.status);
+        return Promise.resolve(res);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(error.response);
+        }
+        showAlert('Error setting leverage.', 'error');
+        return Promise.reject(error);
+      }
+    }
+
     async function deleteTrade(tradeid: string) {
       try {
         const res = await api.delete<DeleteTradeResponse>(`/trades/${tradeid}`);
@@ -1633,6 +1653,7 @@ export function createBotSubStore(botId: string, botName: string) {
       stopBot,
       stopBuy,
       reloadConfig,
+      setLeverage,
       deleteTrade,
       cancelOpenOrder,
       reloadTrade,

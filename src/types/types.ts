@@ -140,6 +140,7 @@ export interface BotState {
   /** Futures, margin or spot */
   trading_mode?: TradingMode;
   margin_mode?: MarginMode;
+  leverage?: number;
   short_allowed?: boolean;
   state: BotStates;
   runmode: RunModes;

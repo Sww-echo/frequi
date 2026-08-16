@@ -1,5 +1,43 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
 const botStore = useBotStore();
+const { t } = useI18n();
+const { confirm } = useConfirmBox();
+const leverage = ref(1);
+const savingLeverage = ref(false);
+
+const isFutures = computed(() => botStore.activeBot.botState?.trading_mode === 'futures');
+
+watch(
+  () => botStore.activeBot.botState?.leverage,
+  (value) => {
+    leverage.value = value ?? 1;
+  },
+  { immediate: true },
+);
+
+async function applyLeverage() {
+  const value = Number(leverage.value);
+  if (!Number.isFinite(value) || value < 1) {
+    showAlert(t('controls.leverageInvalid'), 'error');
+    return;
+  }
+  if (
+    !(await confirm({
+      title: t('controls.leverageTitle'),
+      message: t('controls.leverageMessage'),
+    }))
+  ) {
+    return;
+  }
+  savingLeverage.value = true;
+  try {
+    await botStore.activeBot.setLeverage(value);
+  } finally {
+    savingLeverage.value = false;
+  }
+}
 </script>
 
 <template>
@@ -32,6 +70,26 @@ const botStore = useBotStore();
       markets, with Strategy <strong>{{ botStore.activeBot.botState.strategy }}</strong
       >.
     </p>
+    <div v-if="isFutures" class="mb-4 rounded border border-neutral-400 p-3 space-y-2">
+      <div class="flex flex-wrap items-end gap-2">
+        <UFormField :label="t('controls.leverageLabel')">
+          <UInputNumber
+            v-model="leverage"
+            :min="1"
+            :max="125"
+            :step="0.5"
+            :max-fraction-digits="1"
+            class="w-36"
+          />
+        </UFormField>
+        <UButton :loading="savingLeverage" @click="applyLeverage">
+          {{ t('controls.leverageApply') }}
+        </UButton>
+      </div>
+      <p class="text-sm text-neutral-600 dark:text-neutral-400">
+        {{ t('controls.leverageHint') }}
+      </p>
+    </div>
     <p v-if="'stoploss_on_exchange' in botStore.activeBot.botState" class="mb-4">
       Stoploss on exchange is
       <strong>{{
