@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 const newblacklistpair = ref('');
 const blacklistSelect = ref<number[]>([]);
 const botStore = useBotStore();

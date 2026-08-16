@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import ECharts from 'vue-echarts';
 import type { ClosedTrade } from '@/types';
 import type { EChartsOption } from 'echarts';
