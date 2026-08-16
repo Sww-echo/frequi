@@ -3,7 +3,6 @@ import type { BacktestPayload } from '@/types';
 
 const botStore = useBotStore();
 const btStore = useBtStore();
-const { t } = useI18n();
 
 function clickBacktest() {
   const btPayload: BacktestPayload = {

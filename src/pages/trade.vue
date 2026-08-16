@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import type { GridItemData } from '@/types';
 import type { TabsItem } from '@nuxt/ui';
 

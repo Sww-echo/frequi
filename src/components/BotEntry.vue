@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import type { BotDescriptor } from '@/types';
 const { confirm } = useConfirmBox();
 const { t } = useI18n();

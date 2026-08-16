@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import type { EChartsOption } from 'echarts';
 import ECharts from 'vue-echarts';
 
