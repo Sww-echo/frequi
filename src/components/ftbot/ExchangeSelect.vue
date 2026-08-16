@@ -3,6 +3,7 @@ import type { ExchangeSelection } from '@/types';
 import type { SelectMenuItem } from '@nuxt/ui';
 
 const exchangeModel = defineModel<ExchangeSelection>({ required: true });
+const { t } = useI18n();
 
 const botStore = useBotStore();
 
@@ -17,11 +18,11 @@ const exchangeList = computed<SelectMenuItem[]>(() => {
 
   return [
     [
-      { label: 'Supported', type: 'label' },
+      { label: t('exchange.supported'), type: 'label' },
       ...supported.map((e) => ({ value: e.classname ?? e.name, label: e.name })),
     ],
     [
-      { label: 'Unsupported', type: 'label' },
+      { label: t('exchange.unsupported'), type: 'label' },
       ...unsupported.map((e) => ({ value: e.classname ?? e.name, label: e.name })),
     ],
   ];

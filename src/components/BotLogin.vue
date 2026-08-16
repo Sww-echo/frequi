@@ -112,12 +112,12 @@ async function handleSubmit() {
       if (typeof route?.query.redirect === 'string') {
         const resolved = router.resolve({ path: route.query.redirect });
         if (resolved.name === '/[...path]') {
-          router.push('/');
+          router.push('/dashboard');
         } else {
           router.push(resolved.path);
         }
       } else {
-        router.push('/');
+        router.push('/dashboard');
       }
     }
   } catch (error) {

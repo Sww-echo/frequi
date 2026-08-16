@@ -44,9 +44,9 @@ function toggleNight() {
 <template>
   <UButton
     variant="link"
-    title="Toggle Night Mode"
+    :title="$t('general.toggleNight')"
     color="neutral"
-    :label="showText ? 'Toggle Night Mode' : ''"
+    :label="showText ? $t('general.toggleNight') : ''"
     @click="toggleNight"
     icon="mdi:brightness-6"
   >

@@ -91,7 +91,7 @@ watchDebounced(
 <template>
   <div>
     <div class="flex flex-col lg:flex-row justify-between mt-1 gap-1">
-      <UFormField label="Type" class="w-full">
+      <UFormField :label="$t('chart.type')" class="w-full">
         <USelect
           id="plotTypeSelector"
           v-model="graphType"
@@ -100,7 +100,7 @@ watchDebounced(
         >
         </USelect>
       </UFormField>
-      <UFormField label="Color" class="w-full">
+      <UFormField :label="$t('chart.color')" class="w-full">
         <UFieldGroup>
           <UPopover placement="bottom" :close-on-click="false">
             <UButton class="h-8 w-8" :style="{ backgroundColor: selColor }"></UButton>
@@ -118,9 +118,9 @@ watchDebounced(
       v-model="fillTo"
       :columns="columns"
       class="mt-1"
-      label="Area chart - Fill to (leave empty for line chart)"
+      :label="$t('chart.areaFill')"
     />
-    <UFormField label="Scatter symbol size" class="w-full" v-if="graphType === ChartType.scatter">
+    <UFormField :label="$t('chart.scatterSize')" class="w-full" v-if="graphType === ChartType.scatter">
       <UInputNumber
         v-model="scatterSymbolSize"
         :min="0"

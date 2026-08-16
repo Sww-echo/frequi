@@ -27,8 +27,10 @@ use([
   TooltipComponent,
 ]);
 
+const { t } = useI18n();
+
 // Define Column labels here to avoid typos
-const CHART_PROFIT = 'Trade count';
+const CHART_PROFIT = t('chart.tradeCount');
 
 const props = withDefaults(
   defineProps<{
@@ -61,7 +63,7 @@ const data = computed(() => {
 const chartOptions = computed((): EChartsOption => {
   const chartOptionsLoc: EChartsOption = {
     title: {
-      text: 'Profit distribution',
+      text: t('dashboard.profitDistribution'),
       left: 'center',
       show: props.showTitle,
     },
@@ -86,7 +88,7 @@ const chartOptions = computed((): EChartsOption => {
     },
     xAxis: {
       type: 'category',
-      name: 'Profit %',
+      name: `${t('chart.profit')} %`,
       nameLocation: 'middle',
       nameGap: 25,
     },
@@ -135,7 +137,7 @@ const chartOptions = computed((): EChartsOption => {
       class="z-2 absolute fixed-top flex items-center gap-10 ms-2 mt-1"
       :class="{ 'mx-auto': showTitle }"
       label-for="input-bins"
-      label="Bins"
+      :label="$t('chart.bins')"
       orientation="horizontal"
     >
       <USelect

@@ -9,6 +9,7 @@ import type {
   PairlistsPayload,
 } from '@/types';
 import { MarginMode, PairlistParamType, TradingMode } from '@/types';
+import { i18n } from '@/locales';
 
 export const usePairlistConfigStore = defineStore(
   'pairlistConfig',
@@ -148,7 +149,7 @@ export const usePairlistConfigStore = defineStore(
         const { job_id: jobId } = await botStore.activeBot.evaluatePairlist(payload);
         const status = await botStore.activeBot.pollBgJob(jobId, 'pairlist');
         if (status.status === 'failed') {
-          showAlert(status.error || 'Evaluation failed', 'error');
+          showAlert(status.error || i18n.global.t('pairlist.evaluationFailed'), 'error');
           return;
         }
         const wl = await botStore.activeBot.getPairlistEvalResult(jobId);
@@ -158,7 +159,7 @@ export const usePairlistConfigStore = defineStore(
           showAlert(wl.error, 'error');
         }
       } catch (error) {
-        showAlert('Evaluation failed', 'error');
+        showAlert(i18n.global.t('pairlist.evaluationFailed'), 'error');
       } finally {
         evaluating.value = false;
       }

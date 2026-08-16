@@ -25,7 +25,7 @@ withDefaults(
         <UButton
           color="neutral"
           variant="outline"
-          title="Delete this value."
+          :title="$t('general.deleteThis', { name: $t('common.value') })"
           class="flex align-items-center justify-content-center"
           icon="mdi:delete"
           @click="values.splice(idx, 1)"
@@ -33,7 +33,7 @@ withDefaults(
       </div>
     </div>
     <UButton
-      :title="`Add new value`"
+      :title="$t('general.addNew', { name: $t('common.value') })"
       color="neutral"
       class="mt-auto flex align-items-center justify-content-center"
       icon="mdi:plus-box-outline"

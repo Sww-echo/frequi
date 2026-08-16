@@ -72,7 +72,12 @@ import { useWebSocket } from '@vueuse/core';
 import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 
+import { i18n } from '@/locales';
 import { evaluateFeatures } from '@/utils/features';
+
+function translate(key: string, params?: Record<string, unknown>) {
+  return i18n.global.t(key, params);
+}
 
 export function createBotSubStore(botId: string, botName: string) {
   const loginInfo = useLoginInfo(botId);
@@ -335,14 +340,14 @@ export function createBotSubStore(botId: string, botName: string) {
     async function deleteLock(lockid: string) {
       try {
         const res = await api.delete<LockResponse>(`/locks/${lockid}`);
-        showAlert(`Deleted Lock ${lockid}.`);
+        showAlert(translate('alerts.lockDeleted', { id: lockid }));
         currentLocks.value = res.data;
         return Promise.resolve(res);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert(`Failed to delete lock ${lockid}`, 'error');
+        showAlert(translate('alerts.lockDeleteFailed', { id: lockid }), 'error');
         return Promise.reject(error);
       }
     }
@@ -437,8 +442,8 @@ export function createBotSubStore(botId: string, botName: string) {
             console.error(err.response);
             const isTimeout = err.code === 'ECONNABORTED' || err.message?.includes('timeout');
             const errMsg = isTimeout
-              ? 'Timeout exceeded'
-              : (err.response?.data?.detail ?? 'Error fetching history');
+              ? translate('errors.timeoutExceeded')
+              : (err.response?.data?.detail ?? translate('errors.fetchingHistory'));
             showAlert(errMsg, 'error');
           }
           return Promise.reject(err);
@@ -459,7 +464,7 @@ export function createBotSubStore(botId: string, botName: string) {
         const payload: Record<string, string> = {};
         if (isWebserverMode.value) {
           if (!strategy.value?.strategy) {
-            return Promise.reject({ data: 'No strategy selected' });
+            return Promise.reject({ data: translate('errors.noStrategySelected') });
           }
           payload['strategy'] = strategy.value.strategy;
         }
@@ -501,7 +506,7 @@ export function createBotSubStore(botId: string, botName: string) {
         console.error(error);
         if (axios.isAxiosError(error)) {
           console.error(error.response);
-          const errMsg = error.response?.data?.detail ?? 'Error fetching history';
+          const errMsg = error.response?.data?.detail ?? translate('errors.fetchingHistory');
           showAlert(errMsg, 'warning');
         }
         return Promise.reject(error);
@@ -833,7 +838,7 @@ export function createBotSubStore(botId: string, botName: string) {
           } catch (error) {
             window.clearInterval(interval);
             bgJobPolls.delete(jobId);
-            showAlert('Failed to get background job status', 'error');
+            showAlert(translate('alerts.backgroundStatusFailed'), 'error');
             reject(error);
           }
         }, 1000);
@@ -865,10 +870,10 @@ export function createBotSubStore(botId: string, botName: string) {
           for (const job of data) {
             backgroundJobs.value[job.job_id] = job;
           }
-          showAlert('All non-running background jobs cleared', 'success');
+          showAlert(translate('alerts.backgroundCleared'), 'success');
         } catch (error) {
           console.error(error);
-          showAlert('Failed to clear background jobs', 'error');
+          showAlert(translate('alerts.backgroundClearFailed'), 'error');
         }
         return;
       }
@@ -956,7 +961,7 @@ export function createBotSubStore(botId: string, botName: string) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert('Error starting bot.', 'error');
+        showAlert(translate('alerts.startFailed'), 'error');
         return Promise.reject(error);
       }
     }
@@ -973,7 +978,7 @@ export function createBotSubStore(botId: string, botName: string) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert('Error stopping bot.', 'error');
+        showAlert(translate('alerts.stopFailed'), 'error');
         return Promise.reject(error);
       }
     }
@@ -990,7 +995,7 @@ export function createBotSubStore(botId: string, botName: string) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert('Error calling stopbuy.', 'error');
+        showAlert(translate('alerts.pauseFailed'), 'error');
         return Promise.reject(error);
       }
     }
@@ -1008,7 +1013,7 @@ export function createBotSubStore(botId: string, botName: string) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert('Error reloading.', 'error');
+        showAlert(translate('alerts.reloadFailed'), 'error');
         return Promise.reject(error);
       }
     }
@@ -1036,13 +1041,15 @@ export function createBotSubStore(botId: string, botName: string) {
     async function deleteTrade(tradeid: string) {
       try {
         const res = await api.delete<DeleteTradeResponse>(`/trades/${tradeid}`);
-        showAlert(res.data.result_msg ? res.data.result_msg : `Deleted Trade ${tradeid}`);
+        showAlert(
+          res.data.result_msg ? res.data.result_msg : translate('alerts.tradeDeleted', { id: tradeid }),
+        );
         return Promise.resolve(res);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert(`Failed to delete trade ${tradeid}`, 'error');
+        showAlert(translate('alerts.tradeDeleteFailed', { id: tradeid }), 'error');
         return Promise.reject(error);
       }
     }
@@ -1050,13 +1057,17 @@ export function createBotSubStore(botId: string, botName: string) {
     async function cancelOpenOrder(tradeid: string) {
       try {
         const res = await api.delete<DeleteTradeResponse>(`/trades/${tradeid}/open-order`);
-        showAlert(res.data.result_msg ? res.data.result_msg : `Canceled open order for ${tradeid}`);
+        showAlert(
+          res.data.result_msg
+            ? res.data.result_msg
+            : translate('alerts.orderCanceled', { id: tradeid }),
+        );
         return Promise.resolve(res);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert(`Failed to cancel open order ${tradeid}`, 'error');
+        showAlert(translate('alerts.orderCancelFailed', { id: tradeid }), 'error');
         return Promise.reject(error);
       }
     }
@@ -1069,7 +1080,7 @@ export function createBotSubStore(botId: string, botName: string) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert(`Failed to reload trade ${tradeid}`, 'error');
+        showAlert(translate('alerts.tradeReloadFailed', { id: tradeid }), 'error');
         return Promise.reject(error);
       }
     }
@@ -1084,7 +1095,7 @@ export function createBotSubStore(botId: string, botName: string) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert(`Failed to get custom data for trade ${tradeid}`, 'error');
+        showAlert(translate('alerts.customDataFailed', { id: tradeid }), 'error');
         return Promise.reject(error);
       }
     }
@@ -1104,13 +1115,13 @@ export function createBotSubStore(botId: string, botName: string) {
           '/forcesell',
           payload,
         );
-        showAlert(`Exit order for ${payload.tradeid} created`, 'success');
+        showAlert(translate('alerts.exitOrderCreated', { id: payload.tradeid }), 'success');
         return Promise.resolve(res);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error(error.response);
         }
-        showAlert(`Failed to create exit order for ${payload.tradeid}`, 'error');
+        showAlert(translate('alerts.exitOrderFailed', { id: payload.tradeid }), 'error');
         return Promise.reject(error);
       }
     }
@@ -1123,17 +1134,20 @@ export function createBotSubStore(botId: string, botName: string) {
             ForceEnterPayload,
             AxiosResponse<StatusResponse | TradeResponse>
           >('/forcebuy', payload);
-          showAlert(`Order for ${payload.pair} created.`, 'success');
+          showAlert(translate('alerts.orderCreated', { pair: payload.pair }), 'success');
           return Promise.resolve(res);
         } catch (error) {
           if (axios.isAxiosError(error)) {
             console.error(error.response);
-            showAlert(`Error occured entering: '${error.response?.data?.error}'`, 'error');
+            showAlert(
+              translate('alerts.entryFailed', { error: error.response?.data?.error }),
+              'error',
+            );
           }
           return Promise.reject(error);
         }
       }
-      const error = 'Pair is empty';
+      const error = translate('errors.pairEmpty');
       console.error(error);
       return Promise.reject(error);
     }
@@ -1151,26 +1165,29 @@ export function createBotSubStore(botId: string, botName: string) {
             const { errors } = result.data;
             Object.keys(errors).forEach((pair) => {
               showAlert(
-                `Error while adding pair ${pair} to Blacklist: ${errors[pair]?.error_msg}`,
+                translate('alerts.pairAddError', {
+                  pair,
+                  error: errors[pair]?.error_msg,
+                }),
                 'error',
               );
             });
           } else {
-            showAlert(`Pair ${payload.blacklist} added.`);
+            showAlert(translate('alerts.pairAdded', { pair: payload.blacklist }));
           }
           return Promise.resolve(result.data);
         } catch (error) {
           if (axios.isAxiosError(error)) {
             console.error(error.response);
             showAlert(
-              `Error occured while adding pairs to Blacklist: '${error.response?.data?.error}'`,
+              translate('alerts.pairAddFailed', { error: error.response?.data?.error }),
               'error',
             );
           }
           return Promise.reject(error);
         }
       }
-      const error = 'Pair is empty';
+      const error = translate('errors.pairEmpty');
       console.error(error);
       return Promise.reject(error);
     }
@@ -1196,26 +1213,29 @@ export function createBotSubStore(botId: string, botName: string) {
             const { errors } = result.data;
             Object.keys(errors).forEach((pair) => {
               showAlert(
-                `Error while removing pair ${pair} from Blacklist: ${errors[pair]?.error_msg}`,
+                translate('alerts.pairRemoveError', {
+                  pair,
+                  error: errors[pair]?.error_msg,
+                }),
                 'error',
               );
             });
           } else {
-            showAlert(`Pair ${blacklistPairs} removed.`);
+            showAlert(translate('alerts.pairRemoved', { pair: blacklistPairs }));
           }
           return Promise.resolve(result.data);
         } catch (error) {
           if (axios.isAxiosError(error)) {
             console.error(error.response);
             showAlert(
-              `Error occured while removing pairs from Blacklist: '${error.response?.data?.error}'`,
+              translate('alerts.pairRemoveFailed', { error: error.response?.data?.error }),
               'error',
             );
           }
           return Promise.reject(error);
         }
       }
-      const error = 'Pair is empty';
+      const error = translate('errors.pairEmpty');
       console.error(error);
       return Promise.reject(error);
     }
@@ -1268,7 +1288,7 @@ export function createBotSubStore(botId: string, botName: string) {
         updateBacktestResult(data.backtest_result);
       }
       if (data.status === 'error') {
-        showAlert(`Backtest failed: ${data.status_msg}.`, 'error');
+        showAlert(translate('alerts.backtestFailed', { message: data.status_msg }), 'error');
       }
     }
 
@@ -1354,7 +1374,7 @@ export function createBotSubStore(botId: string, botName: string) {
 
     async function getBacktestMarketChange() {
       if (!selectedBacktestMetadata.value?.filename) {
-        return Promise.reject('No backtest selected');
+        return Promise.reject(translate('errors.noBacktestSelected'));
       }
       try {
         const { data } = await api.get<BacktestMarketChange>(
@@ -1369,10 +1389,10 @@ export function createBotSubStore(botId: string, botName: string) {
 
     async function getBacktestWalletChange(): Promise<WalletHistoryPerBot> {
       if (!botFeatures.value.walletChange) {
-        return Promise.reject('Backtest wallet change not available');
+        return Promise.reject(translate('errors.backtestWalletUnavailable'));
       }
       if (!selectedBacktestMetadata.value?.filename) {
-        return Promise.reject('No backtest selected');
+        return Promise.reject(translate('errors.noBacktestSelected'));
       }
       try {
         const { data } = await api.get<WalletHistory>(
@@ -1434,7 +1454,7 @@ export function createBotSubStore(botId: string, botName: string) {
       const msg: FTWsMessage = JSON.parse(event.data);
       switch (msg.type) {
         case FtWsMessageTypes.exception:
-          showAlert(`WSException: ${msg.data}`, 'error');
+          showAlert(translate('alerts.wsException', { message: msg.data }), 'error');
           break;
         case FtWsMessageTypes.whitelist:
           whitelist.value = msg.data;
