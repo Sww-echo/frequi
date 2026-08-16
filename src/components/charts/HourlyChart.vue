@@ -30,9 +30,11 @@ use([
   VisualMapPiecewiseComponent,
 ]);
 
+const { t } = useI18n();
+
 // Define Column labels here to avoid typos
-const CHART_PROFIT = 'Profit %';
-const CHART_TRADE_COUNT = 'Trade Count';
+const CHART_PROFIT = `${t('chart.profit')} %`;
+const CHART_TRADE_COUNT = t('chart.tradeCount');
 
 const props = withDefaults(
   defineProps<{
@@ -66,7 +68,7 @@ const hourlyData = computed(() => {
 const hourlyChartOptions = computed((): EChartsOption => {
   return {
     title: {
-      text: 'Hourly Profit',
+      text: t('chart.hourlyProfit'),
       show: props.showTitle,
     },
     backgroundColor: 'rgba(0, 0, 0, 0)',

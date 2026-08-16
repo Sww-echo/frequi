@@ -1,12 +1,7 @@
 ---
 services:
   frequi:
-    # Uncomment the following lines to build the image locally
-    # build:
-    #   context: .
-    #   dockerfile: "./Dockerfile"
-    # image: frequi
-    image: ghcr.io/sww-echo/frequi:latest
+    image: ghcr.io/sww-echo/frequi:develop
     restart: unless-stopped
     ports:
-      - "3000:80"
+      - "127.0.0.1:3001:80"

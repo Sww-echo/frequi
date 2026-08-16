@@ -61,8 +61,8 @@ test.describe('Login', () => {
     await expect(loginButton).toContainText('Submit');
     await Promise.all([loginButton.click(), page.waitForResponse('**/api/v1/token/login')]);
 
+    await expect(page).toHaveURL(/.*\/dashboard/);
     await expect(page.getByText('TestBot', { exact: true })).toBeVisible();
-    await expect(page.locator('button', { hasText: 'Add new Bot' })).toBeVisible();
     await expect(page.locator('button', { hasText: 'Login' })).not.toBeVisible();
     // Test logout
     await page.getByRole('button', { name: 'FT' }).click();

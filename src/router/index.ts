@@ -10,6 +10,9 @@ router.beforeEach((to) => {
   // Init bots here...
   initBots();
   const botStore = useBotStore();
+  if (to.path === '/' && botStore.hasBots) {
+    return '/dashboard';
+  }
   if (!to.meta?.allowAnonymous && !botStore.hasBots) {
     // Forward to login if login is required
     return {

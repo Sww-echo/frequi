@@ -17,6 +17,7 @@ const props = withDefaults(
     keyHeaders: () => [],
   },
 );
+const { t } = useI18n();
 
 const tableItems = computed<ResultsTypeWithKey[]>(() =>
   props.results.map((v) => {
@@ -80,25 +81,25 @@ const tableColumns = computed(() => {
   });
 
   // Fixed metric columns
-  cols.push({ accessorKey: 'trades', header: 'Trades' });
+  cols.push({ accessorKey: 'trades', header: t('trade.title') });
   cols.push({
     id: 'profit_mean',
-    header: 'Avg Profit %',
+    header: `${t('status.avgProfit')} %`,
     cell: ({ row }) => formatPercent(row.original.profit_mean, 2),
   });
   cols.push({
     id: 'profit_total_abs',
-    header: `Tot Profit ${props.stakeCurrency}`,
+    header: `${t('backtest.profit')} ${props.stakeCurrency}`,
     cell: ({ row }) => formatPrice(row.original.profit_total_abs, props.stakeCurrencyDecimals),
   });
   cols.push({
     id: 'profit_total',
-    header: 'Tot Profit %',
+    header: `${t('backtest.profit')} %`,
     cell: ({ row }) => formatPercent(row.original.profit_total, 2),
   });
-  cols.push({ accessorKey: 'wins', header: 'Wins' });
-  cols.push({ accessorKey: 'draws', header: 'Draws' });
-  cols.push({ accessorKey: 'losses', header: 'Losses' });
+  cols.push({ accessorKey: 'wins', header: t('backtest.wins') });
+  cols.push({ accessorKey: 'draws', header: t('backtest.draws') });
+  cols.push({ accessorKey: 'losses', header: t('backtest.losses') });
 
   // Dynamic additional metric columns
   metrics.value.forEach((col) => {
@@ -121,7 +122,7 @@ const tableColumns = computed(() => {
       <div class="flex flex-row w-full justify-between items-center text-">
         {{ title }}
         <div>
-          Shown metrics:
+          {{ $t('backtest.shownMetrics') }}
           <USelectMenu
             multiple
             id="backtestMetrics"

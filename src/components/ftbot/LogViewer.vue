@@ -49,13 +49,13 @@ function scrollToBottom() {
         id="refresh-logs"
         color="neutral"
         size="sm"
-        title="Reload Logs"
+        :title="$t('status.reloadLogs')"
         @click="refreshLogs"
         icon="mdi:refresh"
       />
       <UButton
         size="sm"
-        title="Scroll to bottom"
+        :title="$t('status.scrollBottom')"
         color="neutral"
         @click="scrollToBottom"
         icon="mdi:arrow-down-thick"

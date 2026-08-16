@@ -265,19 +265,19 @@ const markAreaZIndex = computed({
 
 <template>
   <div v-if="columns">
-    <UFormField label="Plot config name" class="text-md">
+    <UFormField :label="$t('chart.plotConfigName')" class="text-md">
       <PlotConfigSelect allow-edit></PlotConfigSelect>
     </UFormField>
     <USeparator class="my-2" />
-    <BaseCheckbox v-model="showTagsInTooltips" class="mb-1">Show Tags in Tooltips</BaseCheckbox>
+    <BaseCheckbox v-model="showTagsInTooltips" class="mb-1">{{ $t('chart.showTags') }}</BaseCheckbox>
     <div class="grid grid-cols-2 items-center gap-2 w-full">
-      <label>Mark Area Z-Index <br /><small>(defaults to 1 - Candlechart is at Z=2)</small></label>
+      <label>{{ $t('chart.markArea') }} <br /><small>{{ $t('chart.markAreaHint') }}</small></label>
 
       <UInputNumber v-model="markAreaZIndex" class="mb-1" />
     </div>
     <USeparator class="my-2" />
 
-    <UFormField label="Target Plot" class="text-md">
+    <UFormField :label="$t('chart.targetPlot')" class="text-md">
       <EditValue
         v-model="selSubPlot"
         :allow-edit="!isMainPlot"
@@ -303,35 +303,35 @@ const markAreaZIndex = computed({
       </EditValue>
     </UFormField>
     <USeparator class="my-2" />
-    <UFormField label="Indicators in this plot" class="text-md">
+    <UFormField :label="$t('chart.indicatorsInPlot')" class="text-md">
       <UListbox v-model="selIndicatorName" value-key="value" :items="usedColumns"> </UListbox>
     </UFormField>
     <div class="flex flex-row mt-1 gap-1">
       <UButton
         color="neutral"
-        title="Remove indicator to plot"
+        :title="$t('chart.removeIndicatorTitle')"
         :disabled="!selIndicatorName"
         class="col"
         @click="removeIndicator"
-        label="Remove indicator"
+        :label="$t('chart.removeIndicator')"
         icon="mdi:minus-box-outline"
       />
 
       <UButton
         color="neutral"
-        title="Load indicator config from template"
+        :title="$t('chart.loadTemplateTitle')"
         @click="fromPlotTemplateVisible = !fromPlotTemplateVisible"
-        label="From template"
+        :label="$t('chart.fromTemplate')"
         icon="mdi:folder-arrow-down-outline"
       />
 
       <UButton
-        title="Add indicator to plot"
+        :title="$t('chart.addIndicatorTitle')"
         icon="mdi:plus-box-outline"
         class="col"
         :disabled="addNewIndicator"
         @click="clickAddNewIndicator"
-        label="Add indicator"
+        :label="$t('chart.addIndicator')"
       />
     </div>
 
@@ -339,7 +339,7 @@ const markAreaZIndex = computed({
       v-if="addNewIndicator"
       :columns="columns"
       class="mt-1"
-      label="Select indicator to add"
+      :label="$t('chart.selectIndicator')"
       @indicator-selected="addNewIndicatorSelected"
     />
 
@@ -357,9 +357,9 @@ const markAreaZIndex = computed({
       <UButton
         color="neutral"
         :disabled="addNewIndicator"
-        title="Reset to last saved configuration"
+        :title="$t('chart.resetTitle')"
         @click="loadPlotConfig"
-        label="Reset"
+        :label="$t('chart.reset')"
         icon="mdi:restore"
       />
 
@@ -381,7 +381,7 @@ const markAreaZIndex = computed({
           addNewIndicator
         "
         color="neutral"
-        label="From strategy"
+        :label="$t('chart.fromStrategy')"
         icon="mdi:download"
         @click="loadPlotConfigFromStrategy"
       />
@@ -390,18 +390,18 @@ const markAreaZIndex = computed({
         id="showButton"
         color="neutral"
         :disabled="addNewIndicator"
-        title="Show configuration for easy transfer to a strategy"
+        :title="$t('chart.showConfigTitle')"
         @click="showConfig = !showConfig"
         :icon="showConfig ? 'mdi:eye-off' : 'mdi:eye'"
-        :label="showConfig ? 'Hide' : 'Show'"
+        :label="showConfig ? $t('chart.hide') : $t('chart.show')"
       />
 
       <UButton
         data-toggle="tooltip"
         :disabled="addNewIndicator"
-        title="Save configuration"
+        :title="$t('common.saveConfiguration')"
         @click="savePlotConfig"
-        label="Save"
+        :label="$t('chart.save')"
         variant="solid"
         icon="mdi:content-save"
       />
@@ -411,10 +411,10 @@ const markAreaZIndex = computed({
       class="mt-1"
       color="neutral"
       size="sm"
-      title="Load configuration from text box below"
+      :title="$t('chart.loadStringTitle')"
       @click="loadConfigFromString"
       icon="mdi:upload"
-      >Load from string below</UButton
+      >{{ $t('chart.loadString') }}</UButton
     >
     <div v-if="showConfig" class="w-full ms-1 mt-2">
       <UTextarea

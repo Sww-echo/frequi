@@ -13,6 +13,7 @@ const emit = defineEmits<{
 }>();
 
 const botStore = useBotStore();
+const { t } = useI18n();
 
 const form = ref<HTMLFormElement>();
 const amount = ref<number | undefined>(undefined);
@@ -59,30 +60,30 @@ const amountDebounced = refDebounced(amount, 250, { maxWait: 500 });
 
 const amountInBase = computed<string>(() => {
   return amountDebounced.value && props.trade.current_rate
-    ? `~${formatPriceCurrency(amountDebounced.value * props.trade.current_rate, props.trade.quote_currency || '', props.stakeCurrencyDecimals)} (Estimated value) `
+    ? `~${formatPriceCurrency(amountDebounced.value * props.trade.current_rate, props.trade.quote_currency || '', props.stakeCurrencyDecimals)} (${t('trade.estimatedValue')}) `
     : '';
 });
-const orderTypeOptions = [
-  { value: 'market', text: 'Market' },
-  { value: 'limit', text: 'Limit' },
-];
+const orderTypeOptions = computed(() => [
+  { value: 'market', text: t('trade.market') },
+  { value: 'limit', text: t('trade.limit') },
+]);
 resetForm();
 </script>
 
 <template>
-  <UModal :title="`Force exiting a trade`" description="Configure and confirm a forced trade exit">
+  <UModal :title="$t('trade.forceExiting')" :description="$t('trade.forceExitDescription')">
     <template #body>
       <form ref="form" class="space-y-4" @submit.prevent="handleExit">
         <div class="mb-4">
           <p class="mb-2">
-            <span>Exiting Trade #{{ trade.trade_id }} {{ trade.pair }}.</span>
+            <span>{{ $t('trade.exitingTrade', { id: trade.trade_id, pair: trade.pair }) }}</span>
             <br />
-            <span>Currently owning {{ trade.amount }} {{ trade.base_currency }}</span>
+            <span>{{ $t('trade.currentlyOwning', { amount: trade.amount, currency: trade.base_currency }) }}</span>
           </p>
         </div>
 
         <UFormField
-          :label="`Amount in ${trade.base_currency} [optional]`"
+          :label="$t('trade.amountOptional', { currency: trade.base_currency })"
           :description="amountInBase"
         >
           <div class="space-y-2">
@@ -106,9 +107,9 @@ resetForm();
           </div>
         </UFormField>
         <UFormField
-          label="Price"
+          :label="$t('trade.price')"
           v-if="botStore.activeBot.botFeatures.forceExitWithPrice"
-          description="Only available with limit orders"
+          :description="$t('trade.limitOnly')"
         >
           <UInputNumber
             id="price-input"
@@ -124,7 +125,7 @@ resetForm();
           />
         </UFormField>
 
-        <UFormField label="OrderType" required>
+        <UFormField :label="$t('trade.orderType')" required>
           <USegmentedControl
             v-model="ordertype"
             :items="orderTypeOptions"
@@ -137,9 +138,9 @@ resetForm();
     </template>
     <template #footer>
       <UButton class="ms-auto" icon="mdi:close" color="neutral" @click="$emit('close', false)"
-        >Cancel</UButton
+        >{{ $t('common.cancel') }}</UButton
       >
-      <UButton icon="mdi:exit-to-app" @click="handleExit">Exit Position</UButton>
+      <UButton icon="mdi:exit-to-app" @click="handleExit">{{ $t('trade.exitPosition') }}</UButton>
     </template>
   </UModal>
 </template>

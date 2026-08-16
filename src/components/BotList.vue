@@ -7,6 +7,7 @@ defineProps<{
 }>();
 
 const botStore = useBotStore();
+const router = useRouter();
 
 const editingBots = ref<string[]>([]);
 const loginDialog = useLoginDialog();
@@ -58,11 +59,16 @@ function stopEditBot(botId: string) {
 
   editingBots.value.splice(editingBots.value.indexOf(botId), 1);
 }
+
+function openBot(botId: string) {
+  botStore.selectBot(botId);
+  router.push('/dashboard');
+}
 </script>
 
 <template>
   <div v-if="botStore.botCount > 0" class="w-full mx-2">
-    <h3 v-if="!small" class="font-bold text-2xl mb-2">Available bots</h3>
+    <h3 v-if="!small" class="font-bold text-2xl mb-2">{{ $t('bot.available') }}</h3>
     <ul
       ref="sortContainer"
       class="flex flex-col divide-y border-x border-neutral-500 rounded-sm border-y divide-solid divide-neutral-500"
@@ -80,7 +86,7 @@ function stopEditBot(botId: string) {
           'bg-primary-100 dark:bg-primary-800 underline font-semibold':
             bot.botId === botStore.selectedBot,
         }"
-        @click="botStore.selectBot(bot.botId)"
+        @click="openBot(bot.botId)"
       >
         <i-mdi-reorder-horizontal v-if="!small" class="handle cursor-pointer me-2 fs-4" />
         <BotRename
@@ -105,7 +111,7 @@ function stopEditBot(botId: string) {
       class="mt-2"
       @click="loginDialog({})"
       icon="mdi:login"
-      label="Add new Bot"
+      :label="$t('bot.add')"
     />
   </div>
 </template>

@@ -10,24 +10,24 @@ const botStore = useBotStore();
     <!-- <TradeList
       class="open-trades"
       :trades="openTrades"
-      title="Open trades"
+      :title="$t('trade.openTrades')"
       :active-trades="true"
-      empty-text="Currently no open trades."
+      :empty-text="$t('trade.currentlyNoOpenTrades')"
     /> -->
     <CustomTradeList
       v-if="!history && !botStore.activeBot.detailTradeId"
       :trades="botStore.activeBot.openTrades"
-      title="Open trades"
+      :title="$t('trade.openTrades')"
       :active-trades="true"
       :stake-currency-decimals="botStore.activeBot.stakeCurrencyDecimals"
-      empty-text="No open Trades."
+      :empty-text="$t('trade.noOpenTrades')"
     />
     <CustomTradeList
       v-if="history && !botStore.activeBot.detailTradeId"
       :trades="botStore.activeBot.closedTrades"
-      title="Trade history"
+      :title="$t('trade.history')"
       :stake-currency-decimals="botStore.activeBot.stakeCurrencyDecimals"
-      empty-text="No closed trades so far."
+      :empty-text="$t('trade.noClosedTrades')"
     />
     <div
       v-if="botStore.activeBot.detailTradeId && botStore.activeBot.tradeDetail"
@@ -37,7 +37,7 @@ const botStore = useBotStore();
         color="neutral"
         class="self-start my-1 ms-1"
         @click="botStore.activeBot.setDetailTrade(null)"
-        label="Back"
+        :label="$t('common.back')"
         icon="mdi:arrow-left"
       />
       <TradeDetail

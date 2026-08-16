@@ -106,7 +106,12 @@ onMounted(async () => {
         :min-h="4"
         drag-allow-from=".drag-header"
       >
-        <DraggableContainer :header="`Profit over time ${botStore.botCount > 1 ? 'combined' : ''}`">
+        <DraggableContainer
+          :header="
+            $t('dashboard.profitOverTime') +
+            (botStore.botCount > 1 ? ` ${$t('dashboard.combined')}` : '')
+          "
+        >
           <PeriodBreakdown multi-bot-view />
         </DraggableContainer>
       </GridItem>
@@ -121,7 +126,7 @@ onMounted(async () => {
         :min-h="4"
         drag-allow-from=".drag-header"
       >
-        <DraggableContainer header="Bot comparison">
+        <DraggableContainer :header="$t('dashboard.botComparison')">
           <BotComparisonList />
         </DraggableContainer>
       </GridItem>
@@ -137,8 +142,8 @@ onMounted(async () => {
         drag-allow-from=".drag-header"
       >
         <DraggableContainer
-          header="Open Trades"
-          info-text="Open trades of all selected bots. Click on a trade to go to the trade page for that trade/bot."
+          :header="$t('dashboard.openTrades')"
+          :info-text="$t('dashboard.openTradesInfo')"
         >
           <TradeList active-trades :trades="botStore.allOpenTradesSelectedBots" multi-bot-view />
         </DraggableContainer>
@@ -154,7 +159,7 @@ onMounted(async () => {
         :min-h="4"
         drag-allow-from=".drag-header"
       >
-        <DraggableContainer header="Cumulative Profit">
+        <DraggableContainer :header="$t('dashboard.cumulativeProfit')">
           <CumProfitChart
             :trades="botStore.allTradesSelectedBots"
             :open-trades="botStore.allOpenTradesSelectedBots"
@@ -173,7 +178,7 @@ onMounted(async () => {
         :min-h="4"
         drag-allow-from=".drag-header"
       >
-        <DraggableContainer header="Wallet History">
+        <DraggableContainer :header="$t('dashboard.walletHistory')">
           <WalletHistoryChart :wallet-data="botStore.allBalanceHistory" :show-title="false" />
         </DraggableContainer>
       </GridItem>
@@ -189,8 +194,8 @@ onMounted(async () => {
         drag-allow-from=".drag-header"
       >
         <DraggableContainer
-          header="Closed Trades"
-          info-text="Closed trades for all selected bots. Click on a trade to go to the trade page for that trade/bot."
+          :header="$t('dashboard.closedTrades')"
+          :info-text="$t('dashboard.closedTradesInfo')"
         >
           <TradeList
             :active-trades="false"
@@ -211,7 +216,7 @@ onMounted(async () => {
         :min-h="4"
         drag-allow-from=".drag-header"
       >
-        <DraggableContainer header="Profit Distribution">
+        <DraggableContainer :header="$t('dashboard.profitDistribution')">
           <ProfitDistributionChart :trades="botStore.allTradesSelectedBots" :show-title="false" />
         </DraggableContainer>
       </GridItem>
@@ -226,7 +231,7 @@ onMounted(async () => {
         :min-h="4"
         drag-allow-from=".drag-header"
       >
-        <DraggableContainer header="Trades Log">
+        <DraggableContainer :header="$t('dashboard.tradesLog')">
           <TradesLogChart :trades="botStore.allTradesSelectedBots" :show-title="false" />
         </DraggableContainer>
       </GridItem>

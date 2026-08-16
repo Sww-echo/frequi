@@ -6,6 +6,7 @@ const props = defineProps<{
   stakeCurrency: string;
   stakeCurrencyDecimals: number;
 }>();
+const { t } = useI18n();
 
 const profit = computed(() => {
   if (!props.profitAll?.short) {
@@ -18,7 +19,7 @@ const profitItems = computed(() => {
   if (!profit.value) return [];
   return [
     {
-      metric: 'ROI closed trades',
+      metric: t('profit.roiClosed'),
       value: profit.value.profit_closed_coin
         ? `${formatPriceCurrency(
             profit.value.profit_closed_coin,
@@ -29,7 +30,7 @@ const profitItems = computed(() => {
       // (&sum; ${formatPercent(profit.value.profit_closed_ratio_sum,  2,)})`
     },
     {
-      metric: 'ROI all trades',
+      metric: t('profit.roiAll'),
       value: profit.value.profit_all_coin
         ? `${formatPriceCurrency(
             profit.value.profit_all_coin,
@@ -41,34 +42,34 @@ const profitItems = computed(() => {
     },
 
     {
-      metric: 'Total Trade count',
+      metric: t('profit.totalCount'),
       value: `${profit.value.trade_count ?? 0}`,
     },
     {
-      metric: 'Bot started',
+      metric: t('profit.botStarted'),
       value: profit.value.bot_start_timestamp,
       isTs: true,
     },
     {
-      metric: 'First Trade opened',
+      metric: t('profit.firstOpened'),
       value: profit.value.first_trade_timestamp,
       isTs: true,
     },
     {
-      metric: 'Latest Trade opened',
+      metric: t('profit.latestOpened'),
       value: profit.value.latest_trade_timestamp,
       isTs: true,
     },
     {
-      metric: 'Win / Loss',
+      metric: t('profit.winLoss'),
       value: `${profit.value.winning_trades ?? 0} / ${profit.value.losing_trades ?? 0}`,
     },
     {
-      metric: 'Winrate',
+      metric: t('profit.winrate'),
       value: `${profit.value.winrate ? formatPercent(profit.value.winrate) : 'N/A'}`,
     },
     {
-      metric: 'Expectancy (ratio)',
+      metric: t('profit.expectancy'),
       value: `${formatNumber(profit.value.expectancy, 2)} (${formatNumber(profit.value.expectancy_ratio, 2)})`,
     },
     {
@@ -92,17 +93,17 @@ const profitItems = computed(() => {
       value: `${formatNumber(profit.value.sqn, 2)}`,
     },
     {
-      metric: 'Avg. Duration',
+      metric: t('profit.avgDuration'),
       value: `${profit.value.avg_duration ?? 'N/A'}`,
     },
     {
-      metric: 'Best performing',
+      metric: t('profit.bestPerforming'),
       value: profit.value.best_pair
         ? `${profit.value.best_pair}: ${formatPercent(profit.value.best_pair_profit_ratio, 2)}`
         : 'N/A',
     },
     {
-      metric: 'Trading volume',
+      metric: t('profit.tradingVolume'),
       value: `${formatPriceCurrency(
         profit.value.trading_volume ?? 0,
         props.stakeCurrency,
@@ -110,11 +111,11 @@ const profitItems = computed(() => {
       )}`,
     },
     {
-      metric: 'Profit factor',
+      metric: t('profit.profitFactor'),
       value: `${formatNumber(profit.value.profit_factor, 2)}`,
     },
     {
-      metric: 'Max Drawdown',
+      metric: t('profit.maxDrawdown'),
       value: `${profit.value.max_drawdown ? formatPercent(profit.value.max_drawdown, 2) : 'N/A'} (${
         profit.value.max_drawdown_abs
           ? formatPriceCurrency(
@@ -125,15 +126,15 @@ const profitItems = computed(() => {
           : 'N/A'
       }) ${
         profit.value.max_drawdown_start_timestamp && profit.value.max_drawdown_end_timestamp
-          ? 'from ' +
+          ? t('profit.from') + ' ' +
             timestampms(profit.value.max_drawdown_start_timestamp) +
-            ' to ' +
+            ' ' + t('profit.to') + ' ' +
             timestampms(profit.value.max_drawdown_end_timestamp)
           : ''
       }`,
     },
     {
-      metric: 'Current Drawdown',
+      metric: t('profit.currentDrawdown'),
       value: `${profit.value.current_drawdown ? formatPercent(profit.value.current_drawdown, 2) : 'N/A'} (${
         profit.value.current_drawdown_abs
           ? formatPriceCurrency(
@@ -144,7 +145,7 @@ const profitItems = computed(() => {
           : 'N/A'
       }) ${
         profit.value.current_drawdown_start_timestamp
-          ? 'since ' + timestampms(profit.value.current_drawdown_start_timestamp)
+          ? `${t('profit.since')} ${timestampms(profit.value.current_drawdown_start_timestamp)}`
           : ''
       }`,
     },
@@ -152,32 +153,32 @@ const profitItems = computed(() => {
 });
 
 const selectedOption = ref('all');
-const options = [
-  { value: 'all', text: 'All' },
-  { value: 'long', text: 'Long' },
-  { value: 'short', text: 'Short' },
-];
+const options = computed(() => [
+  { value: 'all', text: t('profit.all') },
+  { value: 'long', text: t('profit.long') },
+  { value: 'short', text: t('profit.short') },
+]);
 </script>
 
 <template>
   <div>
     <div v-if="profitAll?.long && profitAll?.short" class="flex justify-between items-center">
-      <span>Profits for</span>
+      <span>{{ $t('status.profitsFor') }}</span>
       <USegmentedControl
         v-model="selectedOption"
         :items="options"
         label-key="text"
         value-key="value"
       ></USegmentedControl>
-      <span>Trades</span>
+      <span>{{ $t('status.trades') }}</span>
     </div>
 
     <UTable
       class="text-start"
       :data="profitItems"
       :columns="[
-        { accessorKey: 'metric', header: 'Metric' },
-        { accessorKey: 'value', header: 'Value' },
+        { accessorKey: 'metric', header: $t('profit.metric') },
+        { accessorKey: 'value', header: $t('profit.value') },
       ]"
       :ui="{
         td: 'whitespace-normal',

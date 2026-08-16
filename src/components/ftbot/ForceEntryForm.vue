@@ -17,6 +17,7 @@ const emit = defineEmits<{
 }>();
 
 const botStore = useBotStore();
+const { t } = useI18n();
 
 const form = ref<HTMLFormElement>();
 const selectedPair = ref('');
@@ -28,14 +29,14 @@ const ordertype = ref('');
 const orderSide = ref<OrderSides>(OrderSides.long);
 const enterTag = ref('force_entry');
 
-const orderTypeOptions = [
-  { value: 'market', text: 'Market' },
-  { value: 'limit', text: 'Limit' },
-];
-const orderSideOptions = [
-  { value: 'long', text: 'Long' },
-  { value: 'short', text: 'Short' },
-];
+const orderTypeOptions = computed(() => [
+  { value: 'market', text: t('trade.market') },
+  { value: 'limit', text: t('trade.limit') },
+]);
+const orderSideOptions = computed(() => [
+  { value: 'long', text: t('trade.long') },
+  { value: 'short', text: t('trade.short') },
+]);
 
 function checkFormValidity() {
   const valid = form.value?.checkValidity();
@@ -91,14 +92,14 @@ resetForm();
 
 <template>
   <UModal
-    :title="positionIncrease ? `Increasing position for ${pair}` : 'Force entering a trade'"
-    :description="positionIncrease ? 'Increase an existing position' : 'Manually enter a new trade'"
+    :title="positionIncrease ? $t('trade.increasingPosition', { pair }) : $t('trade.forceEntering')"
+    :description="positionIncrease ? $t('trade.increaseExistingPosition') : $t('trade.manuallyEnter')"
   >
     <template #body>
       <form ref="form" class="space-y-4" @submit.prevent="handleEntry">
         <UFormField
           v-if="botStore.activeBot.botFeatures.forceEnterShort && botStore.activeBot.shortAllowed"
-          label="Order direction (Long or Short)"
+          :label="$t('trade.orderDirection')"
         >
           <USegmentedControl
             v-model="orderSide"
@@ -110,7 +111,7 @@ resetForm();
           />
         </UFormField>
 
-        <UFormField label="Pair" required>
+        <UFormField :label="$t('trade.detail.pair')" required>
           <UInput
             v-model="selectedPair"
             :disabled="positionIncrease"
@@ -121,7 +122,7 @@ resetForm();
           />
         </UFormField>
 
-        <UFormField label="Price [optional]">
+        <UFormField :label="$t('trade.priceOptional')">
           <UInputNumber
             v-model="price"
             show-buttons
@@ -136,7 +137,7 @@ resetForm();
           />
         </UFormField>
 
-        <UFormField :label="`Stake-amount in ${botStore.activeBot.stakeCurrency} [optional]`">
+        <UFormField :label="$t('trade.stakeOptional', { currency: botStore.activeBot.stakeCurrency })">
           <UInputNumber
             v-model="stakeAmount"
             show-buttons
@@ -152,7 +153,7 @@ resetForm();
 
         <UFormField
           v-if="botStore.activeBot.botFeatures.forceEnterShort && botStore.activeBot.shortAllowed"
-          label="Leverage to apply [optional]"
+          :label="$t('trade.leverageOptional')"
         >
           <UInputNumber
             id="leverage-input"
@@ -166,7 +167,7 @@ resetForm();
           />
         </UFormField>
 
-        <UFormField label="OrderType">
+        <UFormField :label="$t('trade.orderType')">
           <USegmentedControl
             v-model="ordertype"
             :items="orderTypeOptions"
@@ -179,7 +180,7 @@ resetForm();
 
         <UFormField
           v-if="botStore.activeBot.botFeatures.forceEntryTag"
-          label="* Custom entry tag [optional]"
+          :label="$t('trade.customEntryTag')"
         >
           <UInput id="enterTag-input" v-model="enterTag" class="w-full" />
         </UFormField>
@@ -187,8 +188,8 @@ resetForm();
     </template>
     <template #footer>
       <div class="ms-auto flex justify-end gap-2">
-        <UButton color="neutral" @click="$emit('close', false)" icon="mdi:close"> Cancel </UButton>
-        <UButton @click="handleEntry" icon="mdi:check"> Enter Position </UButton>
+        <UButton color="neutral" @click="$emit('close', false)" icon="mdi:close">{{ $t('common.cancel') }}</UButton>
+        <UButton @click="handleEntry" icon="mdi:check">{{ $t('trade.enterPosition') }}</UButton>
       </div>
     </template>
   </UModal>

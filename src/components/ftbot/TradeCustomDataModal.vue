@@ -4,10 +4,11 @@ defineProps<{ tradeId: Trade['trade_id'] }>();
 defineEmits<{
   close: [value: boolean];
 }>();
+const { t } = useI18n();
 </script>
 
 <template>
-  <UModal :title="`Custom data for trade ${tradeId}`" description="">
+  <UModal :title="t('trade.customDataFor', { id: tradeId })" description="">
     <template #body>
       <TradeCustomData :trade-id="tradeId" />
     </template>

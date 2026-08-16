@@ -7,13 +7,13 @@ const configNames = computed(() =>
 );
 </script>
 <template>
-  <BaseCollapsible title="Blacklist">
+  <BaseCollapsible :title="$t('pairlist.blacklist')">
     <div class="pb-1 p-2">
       <div class="flex mb-4 items-center gap-2">
-        <span class="col-auto">Copy from:</span>
+        <span class="col-auto">{{ $t('pairlist.copyFrom') }}</span>
         <USelect v-model="copyFromConfig" size="sm" class="grow" :items="configNames" />
         <UButton
-          title="Copy"
+          :title="$t('common.copy')"
           size="sm"
           color="neutral"
           icon="mdi:content-copy"
@@ -22,7 +22,7 @@ const configNames = computed(() =>
       </div>
       <USeparator class="mb-2" />
       <div class="flex flex-col w-full items-center">
-        <h3>Blacklisted Pairs</h3>
+        <h3>{{ $t('pairlist.blacklistedPairs') }}</h3>
         <div
           v-for="(item, i) in pairlistStore.config.blacklist"
           :key="i"
@@ -42,7 +42,7 @@ const configNames = computed(() =>
       <UButton
         icon="mdi:plus"
         variant="solid"
-        label="Add"
+        :label="$t('pairlist.add')"
         @click="pairlistStore.addToBlacklist()"
       />
     </div>
