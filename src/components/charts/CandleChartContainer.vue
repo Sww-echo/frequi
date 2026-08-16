@@ -88,6 +88,10 @@ function assignFirstPair() {
   }
 }
 
+watch([() => props.timeframe, () => props.strategy, () => props.historicView], () => {
+  if (botStore.activeBot.plotMultiPairs.length > 0) refresh();
+});
+
 watch(
   () => props.availablePairs,
   () => {
@@ -207,7 +211,7 @@ const singlePairSelection = computed({
           :key="pair"
           :available-pairs="availablePairs"
           :pair="pair"
-          :historic-view="botStore.activeBot.isWebserverMode"
+          :historic-view="props.historicView"
           :timeframe="timeframe"
           :trades="props.trades"
           :slider-position="props.sliderPosition"

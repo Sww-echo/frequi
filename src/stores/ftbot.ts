@@ -54,6 +54,10 @@ import type {
   RecursiveAnalysisPayload,
   StatusResponse,
   StrategyListResult,
+  StrategyProfile,
+  StrategyProfilePayload,
+  StrategyProfilePreview,
+  RuntimeSettings,
   StrategyResult,
   SysInfoResponse,
   TimeSummaryPayload,
@@ -106,6 +110,8 @@ export function createBotSubStore(botId: string, botName: string) {
 
     const historyTakesLonger = ref(false);
     const strategyList = ref<string[]>([]);
+    const strategyProfiles = ref<StrategyProfile[]>([]);
+    const runtimeSettings = ref<RuntimeSettings | undefined>(undefined);
     const freqaiModelList = ref<string[]>([]);
     const hyperoptLossList = ref<HyperoptLossObj[]>([]);
     const exchangeList = ref<Exchange[]>([]);
@@ -494,6 +500,124 @@ export function createBotSubStore(botId: string, botName: string) {
       } catch (error) {
         console.error(error);
         return Promise.reject(error);
+      }
+    }
+
+    async function getStrategyProfiles() {
+      try {
+        const { data } = await api.get<StrategyProfile[]>('/strategy_profiles');
+        strategyProfiles.value = data;
+        return data;
+      } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+      }
+    }
+
+    async function getRuntimeSettings() {
+      try {
+        const { data } = await api.get<RuntimeSettings>('/runtime_settings');
+        runtimeSettings.value = data;
+        return data;
+      } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+      }
+    }
+
+    async function previewStrategyProfile(payload: StrategyProfilePayload) {
+      try {
+        const { data } = await api.post<
+          StrategyProfilePayload,
+          AxiosResponse<StrategyProfilePreview>
+        >('/strategy_profiles/preview', payload);
+        return data;
+      } catch (error) {
+        console.error(error);
+        if (axios.isAxiosError(error)) {
+          const detail = error.response?.data?.detail;
+          if (detail) showAlert(detail, 'error');
+        }
+        throw error;
+      }
+    }
+
+    async function applyStrategyProfile(payload: StrategyProfilePayload) {
+      try {
+        const { data } = await api.post<StrategyProfilePayload, AxiosResponse<RuntimeSettings>>(
+          '/strategy_profiles/apply',
+          payload,
+        );
+        runtimeSettings.value = data;
+        // Reloading is synchronous on most bots, but poll briefly so the UI does not
+        // show the previous strategy/timeframe when the worker is still restarting.
+        let reloadConfirmed = false;
+        let reloadFailure: string | null = null;
+        for (let attempt = 0; attempt < 10; attempt += 1) {
+          await new Promise((resolve) => window.setTimeout(resolve, 500));
+          try {
+            const state = await getState();
+            const settings = await getRuntimeSettings();
+            if (settings.reload_status === 'failed') {
+              reloadFailure = settings.reload_error || translate('controls.runtimeReloadFailed');
+              break;
+            }
+            if (
+              state.strategy === data.strategy &&
+              state.timeframe === data.timeframe &&
+              settings.strategy === data.strategy &&
+              settings.timeframe === data.timeframe
+            ) {
+              reloadConfirmed = true;
+              break;
+            }
+          } catch (pollError) {
+            // The API can be briefly unavailable while the worker reloads.
+            console.warn('Waiting for bot reload', pollError);
+          }
+        }
+        if (reloadFailure) {
+          showAlert(reloadFailure, 'error');
+        } else if (reloadConfirmed) {
+          showAlert(data.warning || translate('controls.runtimeApplied'));
+        } else {
+          showAlert(translate('controls.runtimeReloadPending'), 'warning');
+        }
+        return runtimeSettings.value || data;
+      } catch (error) {
+        console.error(error);
+        if (axios.isAxiosError(error)) {
+          const detail = error.response?.data?.detail;
+          if (detail) showAlert(detail, 'error');
+        }
+        throw error;
+      }
+    }
+
+    async function getChartHistory(payload: PairHistoryPayload) {
+      if (!payload.pair || !payload.timeframe || !payload.strategy) {
+        return Promise.reject(new Error('pair, timeframe and strategy are required'));
+      }
+      historyStatus.value = LoadingStatus.loading;
+      try {
+        const timeout = 2 * 60 * 1000;
+        const { data } = await api.post<PairHistoryPayload, AxiosResponse<PairHistory>>(
+          '/chart_history',
+          payload,
+          { timeout },
+        );
+        history.value[`${payload.pair}__${payload.timeframe}`] = {
+          pair: payload.pair,
+          timeframe: payload.timeframe,
+          timerange: payload.timerange,
+          data,
+        };
+        historyStatus.value = LoadingStatus.success;
+        return data;
+      } catch (error) {
+        historyStatus.value = LoadingStatus.error;
+        console.error(error);
+        throw error;
       }
     }
 
@@ -1604,6 +1728,8 @@ export function createBotSubStore(botId: string, botName: string) {
       historyStatus,
       historyTakesLonger,
       strategyList,
+      strategyProfiles,
+      runtimeSettings,
       freqaiModelList,
       hyperoptLossList,
       exchangeList,
@@ -1660,6 +1786,11 @@ export function createBotSubStore(botId: string, botName: string) {
       getPairHistory,
       getStrategyPlotConfig,
       getStrategyList,
+      getStrategyProfiles,
+      getRuntimeSettings,
+      previewStrategyProfile,
+      applyStrategyProfile,
+      getChartHistory,
       getStrategy,
       getCurrentStrategy,
       getFreqAIModelList,

@@ -117,6 +117,7 @@ async function applyLeverage() {
         {{ shortEnabled ? t('controls.shortEnabledOn') : t('controls.shortEnabledOff') }}
       </UButton>
     </div>
+    <StrategyRuntimeSettings />
     <p v-if="'stoploss_on_exchange' in botStore.activeBot.botState" class="mb-4">
       {{ $t('status.stoplossExchange') }}
       <strong>{{

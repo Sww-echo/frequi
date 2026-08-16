@@ -1,10 +1,14 @@
 <script setup lang="ts">
-withDefaults(
+const props = withDefaults(
   defineProps<{
     showDetails?: boolean;
+    approvedOnly?: boolean;
+    disabled?: boolean;
   }>(),
   {
     showDetails: false,
+    approvedOnly: false,
+    disabled: false,
   },
 );
 
@@ -13,6 +17,14 @@ const strategy = defineModel<string>();
 const botStore = useBotStore();
 
 const strategyCode = computed((): string => botStore.activeBot.strategy?.code ?? '');
+const strategyItems = computed(() => {
+  if (props.approvedOnly) {
+    return botStore.activeBot.strategyProfiles
+      .filter((profile) => profile.compatible)
+      .map((profile) => profile.strategy);
+  }
+  return botStore.activeBot.strategyList;
+});
 
 watch(strategy, (newStrategy, oldStrategy) => {
   if (!newStrategy || newStrategy === oldStrategy) return;
@@ -20,7 +32,11 @@ watch(strategy, (newStrategy, oldStrategy) => {
 });
 
 onMounted(() => {
-  if (botStore.activeBot.strategyList.length === 0) {
+  if (props.approvedOnly) {
+    if (botStore.activeBot.strategyProfiles.length === 0) {
+      botStore.activeBot.getStrategyProfiles();
+    }
+  } else if (botStore.activeBot.strategyList.length === 0) {
     botStore.activeBot.getStrategyList();
   }
 });
@@ -34,7 +50,8 @@ onMounted(() => {
         v-model="strategy"
         filter
         class="w-full"
-        :items="botStore.activeBot.strategyList"
+        :items="strategyItems"
+        :disabled="props.disabled"
       >
       </USelectMenu>
       <div class="ms-1">
@@ -42,7 +59,11 @@ onMounted(() => {
           color="neutral"
           variant="outline"
           icon="mdi:refresh"
-          @click="botStore.activeBot.getStrategyList()"
+          @click="
+            props.approvedOnly
+              ? botStore.activeBot.getStrategyProfiles()
+              : botStore.activeBot.getStrategyList()
+          "
         />
       </div>
     </div>

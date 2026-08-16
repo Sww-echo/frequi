@@ -198,6 +198,22 @@ export default {
     shortEnabledLabel: 'Automatic shorts',
     shortEnabledOn: 'Enabled',
     shortEnabledOff: 'Disabled',
+    runtimeSettings: 'Trading runtime settings',
+    strategyLabel: 'Trading strategy',
+    strategyPlaceholder: 'Select an approved strategy profile',
+    timeframeLabel: 'Trading timeframe',
+    runtimePreview: 'Preflight',
+    runtimeApply: 'Apply and reload',
+    runtimeApplyTitle: 'Apply trading configuration',
+    runtimeApplyMessage:
+      'The bot will reload its strategy and timeframe. Confirm there are no open trades or unfinished orders.',
+    runtimePreviewReady: 'Preflight passed: {strategy} · {timeframe}',
+    runtimeOpenTradesWarning:
+      'Trading configuration cannot change while trades or unfinished orders exist.',
+    runtimeApplied: 'Configuration applied; the bot is reloading.',
+    runtimeReloadFailed: 'Reload failed and the previous runtime profile was restored.',
+    runtimeReloadPending:
+      'Configuration was written, but the bot has not confirmed the reload yet. Check the bot status before changing it again.',
   },
   alerts: {
     botNotFound: 'Bot not found',

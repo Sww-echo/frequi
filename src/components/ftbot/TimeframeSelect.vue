@@ -1,19 +1,20 @@
 <script setup lang="ts">
 interface Props {
-  value?: string;
   belowTimeframe?: string;
   size?: undefined | 'sm' | 'md' | 'lg' | 'xl';
+  allowedTimeframes?: string[];
+  disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  value: '',
   belowTimeframe: '',
   size: undefined,
+  allowedTimeframes: undefined,
+  disabled: false,
 });
-const emit = defineEmits<{ input: [value: string] }>();
+const selectedTimeframe = defineModel<string>({ default: '' });
 const { t } = useI18n();
 
-const selectedTimeframe = ref('');
 // The below list must always remain sorted correctly!
 const availableTimeframesBase = [
   // Placeholder value
@@ -38,17 +39,16 @@ const availableTimeframesBase = [
 ];
 
 const availableTimeframes = computed(() => {
-  if (!props.belowTimeframe) {
-    return availableTimeframesBase;
+  let values = availableTimeframesBase;
+  if (props.belowTimeframe) {
+    const idx = availableTimeframesBase.findIndex((v) => v.value === props.belowTimeframe);
+    values = [...availableTimeframesBase].splice(0, idx);
   }
-  const idx = availableTimeframesBase.findIndex((v) => v.value === props.belowTimeframe);
-
-  return [...availableTimeframesBase].splice(0, idx);
+  if (!props.allowedTimeframes?.length) return values;
+  return values.filter(
+    (item) => item.value === null || props.allowedTimeframes?.includes(item.value),
+  );
 });
-
-const emitSelectedTimeframe = () => {
-  emit('input', selectedTimeframe.value);
-};
 </script>
 
 <template>
@@ -57,6 +57,6 @@ const emitSelectedTimeframe = () => {
     :placeholder="$t('backtest.useStrategyDefault')"
     :size="size"
     :items="availableTimeframes"
-    @change="emitSelectedTimeframe"
+    :disabled="props.disabled"
   ></USelect>
 </template>

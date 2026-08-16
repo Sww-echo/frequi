@@ -52,11 +52,7 @@ export interface BooleanParameter extends BaseParameter {
 }
 
 export type AllStrategyParameter =
-  | IntParameter
-  | RealParameter
-  | DecimalParameter
-  | CategoricalParameter
-  | BooleanParameter;
+  IntParameter | RealParameter | DecimalParameter | CategoricalParameter | BooleanParameter;
 
 export interface StrategyResult {
   /** Strategy name */
@@ -65,4 +61,46 @@ export interface StrategyResult {
   /** Code of the strategy class */
   code: string;
   params: AllStrategyParameter[];
+}
+
+export interface StrategyProfile {
+  id: string;
+  strategy: string;
+  display_name: string;
+  trading_mode: string;
+  margin_mode: string;
+  timeframes: string[];
+  runtime_timeframes: string[];
+  default_timeframe: string;
+  supports_short: boolean;
+  leverage_allowed: boolean;
+  compatible: boolean;
+  compatibility_reason?: string | null;
+}
+
+export interface RuntimeSettings {
+  profile_id?: string | null;
+  strategy: string;
+  timeframe: string;
+  trading_mode: string;
+  margin_mode: string;
+  leverage?: number | null;
+  short_enabled: boolean;
+  open_trades: number;
+  open_orders: number;
+  can_apply: boolean;
+  warning?: string | null;
+  reload_status: 'idle' | 'pending' | 'succeeded' | 'failed';
+  reload_error?: string | null;
+}
+
+export interface StrategyProfilePayload {
+  profile_id: string;
+  timeframe?: string;
+  leverage?: number;
+  short_enabled?: boolean;
+}
+
+export interface StrategyProfilePreview extends RuntimeSettings {
+  profile: StrategyProfile;
 }
