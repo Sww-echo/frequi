@@ -5,6 +5,7 @@ import type { TableMeta, Row } from '@tanstack/vue-table';
 
 const botStore = useBotStore();
 const { confirm } = useConfirmBox();
+const { t } = useI18n();
 const filterText = ref('');
 const filterTextDebounced = refDebounced(filterText, 350, { maxWait: 1000 });
 
@@ -15,8 +16,8 @@ onMounted(() => {
 async function deleteBacktestResult(result: BacktestHistoryEntry) {
   if (
     await confirm({
-      title: 'Delete result',
-      message: `Delete result ${result.filename} from disk?`,
+      title: t('backtest.deleteThisResult'),
+      message: `${t('common.delete')} ${result.filename} ${t('backtest.deleteThisResult').toLowerCase()}?`,
     })
   ) {
     botStore.activeBot.deleteBacktestHistoryResult(result);
@@ -31,11 +32,11 @@ const filteredList = computed(() =>
   ),
 );
 const columns: TableColumn<BacktestHistoryEntry>[] = [
-  { accessorKey: 'strategy', header: 'Strategy' },
-  { accessorKey: 'timeframe', header: 'Details' },
-  { accessorKey: 'backtest_start_time', header: 'Backtest Time' },
-  { accessorKey: 'filename', header: 'Filename' },
-  { id: 'actions', header: 'Actions' },
+  { accessorKey: 'strategy', header: t('backtest.strategy') },
+  { accessorKey: 'timeframe', header: t('backtest.details') },
+  { accessorKey: 'backtest_start_time', header: t('backtest.time') },
+  { accessorKey: 'filename', header: t('backtest.filename') },
+  { id: 'actions', header: t('common.actions') },
 ];
 
 function isRowLoaded(row: Row<BacktestHistoryEntry>) {
@@ -58,24 +59,23 @@ const meta: TableMeta<BacktestHistoryEntry> = {
   <div>
     <UButton
       class="float-end"
-      title="Refresh"
-      aria-label="Refresh"
+      :title="$t('common.refresh')"
+      :aria-label="$t('common.refresh')"
       variant="outline"
       color="neutral"
       icon="mdi:refresh"
       @click="botStore.activeBot.getBacktestHistory"
     />
     <p>
-      Load Historic results from disk. You can click on multiple results to load all of them into
-      freqUI.
+      {{ $t('backtest.historicDescription') }}
     </p>
     <div v-if="botStore.activeBot.backtestHistoryList.length > 0" class="flex align-center">
       <UInput
         id="trade-filter"
         v-model="filterText"
         type="text"
-        placeholder="Filter results"
-        title="Filter results"
+        :placeholder="$t('backtest.filterResults')"
+        :title="$t('backtest.filterResults')"
       />
     </div>
     <UTable
@@ -110,7 +110,7 @@ const meta: TableMeta<BacktestHistoryEntry> = {
             v-if="botStore.activeBot.botFeatures.backtestDelete && !isRowLoaded(row)"
             size="sm"
             variant="solid"
-            title="Load this Result"
+            :title="$t('backtest.loadThisResult')"
             color="primary"
             icon="mdi:arrow-right"
             :disabled="isRowLoaded(row)"
@@ -118,7 +118,7 @@ const meta: TableMeta<BacktestHistoryEntry> = {
           />
           <UButton
             v-if="isRowLoaded(row)"
-            title="Unload this Result from the UI (will remain on disk)"
+            :title="$t('backtest.unloadResult')"
             icon="mdi:close"
             size="sm"
             variant="solid"
@@ -129,7 +129,7 @@ const meta: TableMeta<BacktestHistoryEntry> = {
             v-if="botStore.activeBot.botFeatures.backtestDelete"
             size="sm"
             color="neutral"
-            title="Delete this Result from Disk"
+            :title="$t('backtest.deleteThisResult')"
             icon="mdi:delete"
             :disabled="isRowLoaded(row)"
             @click.stop="deleteBacktestResult(row.original)"

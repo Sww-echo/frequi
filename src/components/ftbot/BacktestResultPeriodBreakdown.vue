@@ -5,18 +5,19 @@ import type { TableColumn } from '@nuxt/ui';
 const props = defineProps<{
   periodicBreakdown: PeriodicBreakdown;
 }>();
+const { t } = useI18n();
 
 const periodicBreakdownSelections = computed(() => {
   const res = [
-    { value: 'day', label: 'Days' },
-    { value: 'week', label: 'Weeks' },
-    { value: 'month', label: 'Months' },
+    { value: 'day', label: t('backtest.periodDays') },
+    { value: 'week', label: t('backtest.periodWeeks') },
+    { value: 'month', label: t('backtest.periodMonths') },
   ];
   if (props.periodicBreakdown.year) {
-    res.push({ value: 'year', label: 'Years' });
+    res.push({ value: 'year', label: t('backtest.periodYears') });
   }
   if (props.periodicBreakdown.weekday) {
-    res.push({ value: 'weekday', label: 'Weekday' });
+    res.push({ value: 'weekday', label: t('backtest.periodWeekday') });
   }
 
   return res;
@@ -35,16 +36,16 @@ type PeriodRow = {
   loses?: number;
 };
 
-const columns: TableColumn<PeriodRow>[] = [
-  { accessorKey: 'date', header: 'Date' },
-  { accessorKey: 'trades', header: 'Trades' },
-  { accessorKey: 'profit_abs', header: 'Total Profit' },
-  { accessorKey: 'profit_factor', header: 'Profit Factor' },
-  { accessorKey: 'wins', header: 'Wins' },
-  { accessorKey: 'draws', header: 'Draws' },
-  { accessorKey: 'losses', header: 'Losses' },
-  { id: 'win_rate', header: 'Win Rate' },
-];
+const columns = computed<TableColumn<PeriodRow>[]>(() => [
+  { accessorKey: 'date', header: t('common.date') },
+  { accessorKey: 'trades', header: t('trade.title') },
+  { accessorKey: 'profit_abs', header: t('backtest.profit') },
+  { accessorKey: 'profit_factor', header: t('status.profitFactor') },
+  { accessorKey: 'wins', header: t('backtest.wins') },
+  { accessorKey: 'draws', header: t('backtest.draws') },
+  { accessorKey: 'losses', header: t('backtest.losses') },
+  { id: 'win_rate', header: t('backtest.winRate') },
+]);
 </script>
 
 <template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const botStore = useBotStore();
+const { t } = useI18n();
 enum PerformanceOptions {
   performance = 'performance',
   entryStats = 'entryStats',
@@ -24,32 +25,32 @@ const performanceTable = computed<
 >(() => {
   const textLength = 17;
   const initialCol = {
-    [PerformanceOptions.performance]: { key: 'pair', label: 'Pair' },
+    [PerformanceOptions.performance]: { key: 'pair', label: t('performance.pair') },
     [PerformanceOptions.entryStats]: {
       key: 'enter_tag',
-      label: 'Enter tag',
+      label: t('performance.enterTag'),
       formatter: (v: unknown) => formatTextLen(v as string, textLength),
     },
     [PerformanceOptions.exitStats]: {
       key: 'exit_reason',
-      label: 'Exit Reason',
+      label: t('performance.exitReason'),
       formatter: (v: unknown) => formatTextLen(v as string, textLength),
     },
     [PerformanceOptions.mixTagStats]: {
       key: 'mix_tag',
-      label: 'Mix Tag',
+      label: t('performance.mixTag'),
       formatter: (v: unknown) => formatTextLen(v as string, textLength),
     },
   };
   return [
     initialCol[selectedOption.value],
-    { key: 'profit', label: 'Profit %' },
+    { key: 'profit', label: t('performance.profitPercent') },
     {
       key: 'profit_abs',
       label: `Profit ${botStore.activeBot.botState?.stake_currency}`,
       formatter: (v: unknown) => formatPrice(v as number, 5),
     },
-    { key: 'count', label: 'Count' },
+    { key: 'count', label: t('performance.count') },
   ];
 });
 
@@ -69,12 +70,12 @@ const performanceData = computed(() => {
   return [];
 });
 
-const options = [
-  { value: PerformanceOptions.performance, text: 'Performance' },
-  { value: PerformanceOptions.entryStats, text: 'Entries' },
-  { value: PerformanceOptions.exitStats, text: 'Exits' },
-  { value: PerformanceOptions.mixTagStats, text: 'Mix Tag' },
-];
+const options = computed(() => [
+  { value: PerformanceOptions.performance, text: t('performance.title') },
+  { value: PerformanceOptions.entryStats, text: t('performance.entries') },
+  { value: PerformanceOptions.exitStats, text: t('performance.exits') },
+  { value: PerformanceOptions.mixTagStats, text: t('performance.mixTag') },
+]);
 
 function refreshSummary() {
   if (selectedOption.value === PerformanceOptions.performance) {
@@ -111,7 +112,7 @@ watch(selectedOption, () => {
 <template>
   <div>
     <div class="mb-2">
-      <h3 class="me-auto text-2xl inline">Performance</h3>
+      <h3 class="me-auto text-2xl inline">{{ $t('performance.title') }}</h3>
       <UButton class="float-end" color="neutral" icon="mdi:refresh" @click="refreshSummary" />
     </div>
     <USegmentedControl

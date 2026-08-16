@@ -33,8 +33,10 @@ use([
   VisualMapPiecewiseComponent,
 ]);
 
+const { t } = useI18n();
+
 // Define Column labels here to avoid typos
-const CHART_PROFIT = 'Profit %';
+const CHART_PROFIT = `${t('chart.profit')} %`;
 const CHART_COLOR = '#9be0a8';
 
 const props = withDefaults(
@@ -76,7 +78,7 @@ const chartOptions = computed((): EChartsOption => {
   const datazoomStart = chartData.value.length > 0 ? (1 - 50 / chartData.value.length) * 100 : 100;
   return {
     title: {
-      text: 'Trades log',
+      text: t('chart.tradesLog'),
       left: 'center',
       show: props.showTitle,
     },
@@ -93,7 +95,7 @@ const chartOptions = computed((): EChartsOption => {
         | ${echartsFormat.encodeHTML(params[0].data[5])} ${echartsFormat.encodeHTML(botName)}
         <br />
         ${echartsFormat.encodeHTML(params[0].data[4])}<br/>
-        Profit ${echartsFormat.encodeHTML(params[0].data[1])} %`;
+        ${t('chart.profit')} ${echartsFormat.encodeHTML(params[0].data[1])} %`;
       },
       axisPointer: {
         type: 'line',

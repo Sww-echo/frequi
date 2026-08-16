@@ -1,16 +1,9 @@
-const pairTemplates = ref([
-  {
-    description: 'All USDT Pairs',
-    pairs: ['.*/USDT'],
-  },
-  {
-    description: 'All USDT Futures Pairs',
-    pairs: ['.*/USDT:USDT'],
-  },
-]);
-
 export function usePairTemplates() {
+  const { t } = useI18n();
   return {
-    pairTemplates: computed(() => pairTemplates.value.map((x, idx) => ({ ...x, idx }))),
+    pairTemplates: computed(() => [
+      { description: t('download.allUsdtPairs'), pairs: ['.*/USDT'], idx: 0 },
+      { description: t('download.allUsdtFuturesPairs'), pairs: ['.*/USDT:USDT'], idx: 1 },
+    ]),
   };
 }

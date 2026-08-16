@@ -1,12 +1,10 @@
 ---
 services:
   frequi:
-    # Uncomment the following lines to build the image locally
-    # build:
-    #   context: .
-    #   dockerfile: "./Dockerfile"
-    # image: frequi
-    image: freqtradeorg/frequi:latest
+    build:
+      context: .
+      dockerfile: "./Dockerfile"
+    image: sww-echo-frequi:zh-cn
     restart: unless-stopped
     ports:
-      - "3000:80"
+      - "127.0.0.1:3001:80"

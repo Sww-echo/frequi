@@ -38,8 +38,10 @@ use([
   TooltipComponent,
 ]);
 
+const { t } = useI18n();
+
 // Define Column labels here to avoid typos
-const CHART_PROFIT = 'Profit';
+const CHART_PROFIT = t('chart.profit');
 
 const props = withDefaults(
   defineProps<{
@@ -210,7 +212,7 @@ const cumProfitChartOptions: ComputedRefWithControl<EChartsOption> = computedWit
   () => {
     const chartOptionsLoc: EChartsOption = {
       title: {
-        text: 'Cumulative Profit',
+        text: t('chart.cumulativeProfit'),
         left: 'center',
         show: props.showTitle,
       },
@@ -221,8 +223,8 @@ const cumProfitChartOptions: ComputedRefWithControl<EChartsOption> = computedWit
           const profit = params[0].data.profit;
           const currentProfit = params[0].data['currentProfit'];
           const profitText = currentProfit
-            ? `Projected profit (incl. unrealized): ${formatPrice(currentProfit, 3)}`
-            : `Profit: ${formatPrice(profit, 3)}`;
+            ? `${t('chart.projectedProfit')}: ${formatPrice(currentProfit, 3)}`
+            : `${t('chart.profit')}: ${formatPrice(profit, 3)}`;
           return `${echartsFormat.encodeHTML(timestampToDateString(params[1].data.date))}<br />${
             params[1].marker
           }${profitText}`;

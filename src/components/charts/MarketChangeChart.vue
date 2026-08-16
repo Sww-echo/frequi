@@ -35,8 +35,10 @@ use([
   TransformComponent,
 ]);
 
+const { t } = useI18n();
+
 // Define Column labels here to avoid typos
-const CHART_MARKET_CHANGE = 'Market change %';
+const CHART_MARKET_CHANGE = t('chart.marketChange');
 
 const props = withDefaults(
   defineProps<{
@@ -61,7 +63,7 @@ const marketChangeOptions: ComputedRef<EChartsOption> = computed(() => {
   const colRelMean = props.marketChangeData.columns.findIndex((el) => el === 'rel_mean');
   return {
     title: {
-      text: 'Market change %',
+      text: t('chart.marketChange'),
       left: 'center',
       show: props.showTitle,
     },

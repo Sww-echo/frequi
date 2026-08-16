@@ -11,12 +11,13 @@ const props = withDefaults(defineProps<Props>(), {
   size: undefined,
 });
 const emit = defineEmits<{ input: [value: string] }>();
+const { t } = useI18n();
 
 const selectedTimeframe = ref('');
 // The below list must always remain sorted correctly!
 const availableTimeframesBase = [
   // Placeholder value
-  { value: null, label: 'Use strategy default' },
+  { value: null, label: t('backtest.useStrategyDefault') },
   { value: '1m', label: '1m' },
   { value: '3m', label: '3m' },
   { value: '5m', label: '5m' },
@@ -53,7 +54,7 @@ const emitSelectedTimeframe = () => {
 <template>
   <USelect
     v-model="selectedTimeframe"
-    placeholder="Use strategy default"
+    :placeholder="$t('backtest.useStrategyDefault')"
     :size="size"
     :items="availableTimeframes"
     @change="emitSelectedTimeframe"

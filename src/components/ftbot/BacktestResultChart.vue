@@ -46,8 +46,8 @@ onMounted(() => {
     <div class="flex flex-row mb-1 items-center">
       <div class="me-2">
         <UButton
-          aria-label="Close"
-          title="Pair Navigation"
+          :aria-label="$t('common.close')"
+          :title="$t('chart.pairNavigation')"
           color="neutral"
           variant="outline"
           :icon="isBarVisible.left ? 'mdi:chevron-left' : 'mdi:chevron-right'"
@@ -55,14 +55,14 @@ onMounted(() => {
         />
       </div>
       <span class="grow">
-        Graph will always show the latest values for the selected strategy. <br />
-        Timerange: {{ timerange }} - {{ strategy }}
+        {{ $t('chart.latestStrategyValues') }}<br />
+        {{ $t('chart.timerange') }} {{ timerange }} - {{ strategy }}
       </span>
       <div class="text-end">
         <UButton
-          aria-label="Close"
+          :aria-label="$t('common.close')"
           variant="outline"
-          title="Trade Navigation"
+          :title="$t('trade.navigation')"
           color="neutral"
           :icon="isBarVisible.right ? 'mdi:chevron-right' : 'mdi:chevron-left'"
           @click="isBarVisible.right = !isBarVisible.right"
@@ -106,7 +106,7 @@ onMounted(() => {
         />
       </Transition>
     </div>
-    <DraggableContainer header="Single trades" class="row mt-2 w-full">
+    <DraggableContainer :header="$t('backtest.singleTrades')" class="row mt-2 w-full">
       <TradeList
         class="row trade-history mt-2 w-full"
         :trades="backtestResult.trades"

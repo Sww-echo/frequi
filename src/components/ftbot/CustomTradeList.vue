@@ -13,12 +13,12 @@ const props = withDefaults(
     stakeCurrencyDecimals?: number;
   }>(),
   {
-    title: 'Trades',
+    title: '',
     stakeCurrency: '',
     activeTrades: false,
     showFilter: false,
     multiBotView: false,
-    emptyText: 'No Trades to show.',
+    emptyText: '',
     stakeCurrencyDecimals: 3,
   },
 );
@@ -50,7 +50,7 @@ const tradeClick = (trade) => {
         <CustomTradeListEntry :trade="trade" :stake-currency-decimals="stakeCurrencyDecimals" />
       </div>
     </div>
-    <span v-if="trades.length === 0" class="mt-5">{{ emptyText }}</span>
+    <span v-if="trades.length === 0" class="mt-5">{{ emptyText || $t('trade.noTrades') }}</span>
 
     <div class="w-full flex justify-content-between mt-1">
       <UPagination
@@ -60,7 +60,7 @@ const tradeClick = (trade) => {
         :items-per-page="perPage"
         aria-controls="tradeList"
       />
-      <UInput v-if="showFilter" v-model="filterText" type="text" placeholder="Filter" />
+      <UInput v-if="showFilter" v-model="filterText" type="text" :placeholder="$t('common.filter')" />
     </div>
   </div>
 </template>
