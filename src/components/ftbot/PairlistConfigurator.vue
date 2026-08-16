@@ -110,13 +110,13 @@ if (pairlistStore.whitelist.length > 0) {
       <PairlistConfigActions />
       <div class="border rounded-sm border-neutral-500 p-2 mb-2">
         <div class="flex items-center gap-2 my-2">
-          <span class="col-auto">Stake currency: </span>
+          <span class="col-auto">{{ $t('pairlist.stakeCurrency') }} </span>
           <UInput v-model="pairlistStore.stakeCurrency" />
         </div>
 
         <div class="mb-2 border rounded-sm border-neutral-500 p-2 text-start">
           <BaseCheckbox v-model="pairlistStore.customExchange" class="mb-2">
-            Custom Exchange
+            {{ $t('download.customExchange') }}
           </BaseCheckbox>
           <Transition name="fade">
             <ExchangeSelect
@@ -131,9 +131,8 @@ if (pairlistStore.whitelist.length > 0) {
         v-if="pairlistStore.config.pairlists.length > 0 && !pairlistStore.firstPairlistIsGenerator"
         class="my-2"
         color="warning"
-        title="Invalid configuration"
-        description="The first entry in the pairlist must be a Generating pairlist, like StaticPairList or
-          VolumePairList."
+        :title="$t('pairlist.invalidTitle')"
+        :description="$t('pairlist.invalidDescription')"
       />
       <div
         ref="pairlistConfigsEl"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { BotDescriptor } from '@/types';
 const { confirm } = useConfirmBox();
+const { t } = useI18n();
 
 const props = defineProps<{
   bot: BotDescriptor;
@@ -20,7 +21,7 @@ function confirmRemoveBot() {
 async function removeBotQuestion() {
   if (
     await confirm({
-      title: 'Logout confirmation',
+      title: t('bot.logoutConfirmation'),
       message: `Really remove (logout) from ${props.bot.botName} (${props.bot.botId})?`,
     })
   ) {
@@ -56,14 +57,14 @@ const autoRefreshLoc = computed({
         />
         <div
           v-if="selectedBotStore.isBotLoggedIn"
-          :title="selectedBotStore.isBotOnline ? 'Online' : 'Offline'"
+          :title="selectedBotStore.isBotOnline ? $t('status.online') : $t('status.offline')"
         >
           <i-mdi-circle
             class="mx-1"
             :class="selectedBotStore.isBotOnline ? 'text-green-500' : 'text-red-500'"
           />
         </div>
-        <div v-else title="Login info expired, please login again.">
+        <div v-else :title="$t('bot.expired')">
           <i-mdi-cancel class="text-red-500 mx-1" />
         </div>
       </div>
@@ -73,7 +74,7 @@ const autoRefreshLoc = computed({
           v-if="!noButtons && selectedBotStore.isBotLoggedIn"
           color="neutral"
           variant="soft"
-          title="Edit bot"
+          :title="$t('bot.edit')"
           @click="$emit('edit', bot.botId)"
           icon="mdi:pencil"
         />
@@ -81,7 +82,7 @@ const autoRefreshLoc = computed({
           v-if="!noRefreshSwitch && !selectedBotStore.isBotLoggedIn"
           variant="soft"
           color="neutral"
-          title="Login again"
+          :title="$t('bot.loginAgain')"
           @click="$emit('editLogin', bot.botId)"
           icon="mdi:login"
         />
@@ -89,7 +90,7 @@ const autoRefreshLoc = computed({
           v-if="!noButtons"
           variant="soft"
           color="neutral"
-          title="Delete bot"
+          :title="$t('bot.delete')"
           @click="removeBotQuestion"
           icon="mdi:delete"
         />

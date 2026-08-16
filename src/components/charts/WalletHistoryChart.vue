@@ -50,6 +50,7 @@ const props = withDefaults(
 );
 
 const settingsStore = useSettingsStore();
+const { t } = useI18n();
 const legendSelection = ref<Record<string, boolean>>({});
 
 const handleLegendSelectChanged = (params: { selected: Record<string, boolean> }) => {
@@ -125,18 +126,18 @@ const walletHistoryOptions: ComputedRef<EChartsOption> = computed(() => {
 
     const markLineData: MarkLineComponentOption['data'] = [
       {
-        name: 'Starting balance',
+        name: t('chart.startingBalance'),
         yAxis: startingValue,
         emphasis: { disabled: true },
         label: {
           show: true,
           position: 'insideStartTop',
-          formatter: `Starting balance ${botName}`,
+          formatter: `${t('chart.startingBalance')} ${botName}`,
           color: captureLineColor,
         },
       },
       {
-        name: 'Zero',
+        name: '0',
         label: {
           show: false,
         },
@@ -150,13 +151,13 @@ const walletHistoryOptions: ComputedRef<EChartsOption> = computed(() => {
 
     if (shouldShowCaptureLine) {
       markLineData.push({
-        name: 'Capture start',
+        name: t('chart.captureStart'),
         xAxis: captureStartTs,
         emphasis: { disabled: true },
         label: {
           show: true,
           position: 'insideEndTop',
-          formatter: `Capture start ${botName}`,
+          formatter: `${t('chart.captureStart')} ${botName}`,
           color: captureLineColor,
         },
         lineStyle: {
@@ -238,7 +239,7 @@ const walletHistoryOptions: ComputedRef<EChartsOption> = computed(() => {
 
   const option: EChartsOption = {
     title: {
-      text: 'Wallet Balance',
+      text: t('chart.walletBalance'),
       left: 'center',
       show: props.showTitle,
     },
@@ -346,9 +347,9 @@ const walletHistoryOptions: ComputedRef<EChartsOption> = computed(() => {
     autoresize
   />
   <div v-else class="flex flex-col items-center justify-center h-full gap-2">
-    <p class="text-gray-500">No historic wallet data available.</p>
+    <p class="text-gray-500">{{ $t('chart.noWalletData') }}</p>
     <p class="text-gray-500 text-sm">
-      You may need to update your freqtrade version to have historic wallet balance data available.
+      {{ $t('chart.walletDataHint') }}
     </p>
   </div>
 </template>

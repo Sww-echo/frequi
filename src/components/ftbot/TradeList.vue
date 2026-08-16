@@ -16,12 +16,12 @@ const props = withDefaults(
     emptyText?: string;
   }>(),
   {
-    title: 'Trades',
+    title: '',
     stakeCurrency: '',
     activeTrades: false,
     showFilter: false,
     multiBotView: false,
-    emptyText: 'No Trades to show.',
+    emptyText: '',
   },
 );
 
@@ -41,34 +41,34 @@ function formatPriceWithDecimals(price: number) {
 
 const tableFields = ref([
   { field: 'trade_id', header: 'ID' },
-  { field: 'pair', header: 'Pair' },
-  { field: 'amount', header: 'Amount' },
+  { field: 'pair', header: t('trade.detail.pair') },
+  { field: 'amount', header: t('trade.detail.amount') },
   props.activeTrades
-    ? { field: 'stake_amount', header: 'Stake amount' }
-    : { field: 'max_stake_amount', header: 'Total stake amount' },
+    ? { field: 'stake_amount', header: t('trade.detail.stake') }
+    : { field: 'max_stake_amount', header: t('trade.detail.totalStake') },
   {
     field: 'open_rate',
-    header: 'Open rate',
+    header: t('trade.detail.openRate'),
   },
   {
     field: props.activeTrades ? 'current_rate' : 'close_rate',
-    header: props.activeTrades ? 'Current rate' : 'Close rate',
+    header: props.activeTrades ? t('trade.detail.currentRate') : t('trade.detail.closeRate'),
   },
   {
     field: 'profit',
-    header: props.activeTrades ? 'Current profit %' : 'Profit %',
+    header: props.activeTrades ? t('trade.currentProfit') : t('trade.profitPercent'),
   },
-  { field: 'open_timestamp', header: 'Open date' },
+  { field: 'open_timestamp', header: t('trade.openDate') },
   ...(props.activeTrades
     ? [{ field: 'actions', header: '' }]
     : [
-        { field: 'close_timestamp', header: 'Close date' },
-        { field: 'exit_reason', header: 'Close Reason' },
+        { field: 'close_timestamp', header: t('trade.detail.closeDate') },
+        { field: 'exit_reason', header: t('trade.detail.exitReason') },
       ]),
 ]);
 
 if (props.multiBotView) {
-  tableFields.value.unshift({ field: 'botName', header: 'Bot' });
+  tableFields.value.unshift({ field: 'botName', header: t('common.botName') });
 }
 
 const tableColumns = computed<TableColumn<Trade>[]>(() =>
@@ -94,10 +94,10 @@ async function forceExitHandler(item: Trade, ordertype: string | undefined = und
   if (
     settingsStore.confirmDialog !== true ||
     (await confirm({
-      title: 'Force exit trade',
-      description: 'This action cannot be undone.',
+      title: t('trade.forceExit'),
+      description: t('trade.irreversible'),
       message,
-      confirmText: 'Confirm',
+      confirmText: t('common.confirm'),
     }))
   ) {
     const payload: MultiForceExitPayload = {
@@ -117,10 +117,10 @@ async function forceExitHandler(item: Trade, ordertype: string | undefined = und
 async function removeTradeHandler(item: Trade) {
   if (
     await confirm({
-      title: 'Delete trade',
-      description: 'This action cannot be undone.',
+      title: t('trade.delete'),
+      description: t('trade.irreversible'),
       message: `Really delete trade ${item.trade_id} (Pair ${item.pair})?`,
-      confirmText: 'Confirm',
+      confirmText: t('common.confirm'),
     })
   ) {
     const payload: MultiDeletePayload = {
@@ -141,10 +141,10 @@ function forceExitPartialHandler(item: Trade) {
 async function cancelOpenOrderHandler(item: Trade) {
   if (
     await confirm({
-      title: 'Cancel open order',
-      description: 'This action cannot be undone.',
+      title: t('trade.cancelOpenOrder'),
+      description: t('trade.irreversible'),
       message: `Really cancel open order for trade ${item.trade_id} (Pair ${item.pair})?`,
-      confirmText: 'Confirm',
+      confirmText: t('common.confirm'),
     })
   ) {
     const payload: MultiDeletePayload = {
@@ -215,7 +215,7 @@ const rowSelection = computed({
       @select="onRowSelect"
     >
       <template #empty>
-        {{ emptyText }}
+        {{ emptyText || $t('trade.noTrades') }}
       </template>
       <template #trade_id-cell="{ row }">
         {{ row.original.trade_id }}
@@ -272,7 +272,7 @@ const rowSelection = computed({
     </UTable>
 
     <div v-if="showFilter" class="flex justify-end gap-2 p-2">
-      <UInput v-model="filterText" placeholder="Filter" class="w-64" />
+      <UInput v-model="filterText" :placeholder="$t('common.filter')" class="w-64" />
     </div>
     <div v-if="!activeTrades" class="flex justify-end border-t border-default pt-2">
       <UPagination

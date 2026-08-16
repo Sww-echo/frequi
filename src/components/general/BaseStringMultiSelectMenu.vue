@@ -10,12 +10,15 @@ const props = withDefaults(
     virtualize?: boolean | Record<string, unknown>;
   }>(),
   {
-    placeholder: 'Select items',
-    searchPlaceholder: 'Search...',
+    placeholder: '',
+    searchPlaceholder: '',
     size: 'md',
     virtualize: false,
   },
 );
+const { t } = useI18n();
+const placeholderText = computed(() => props.placeholder || t('common.selectItems'));
+const searchPlaceholderText = computed(() => props.searchPlaceholder || t('common.search'));
 
 const modelValue = defineModel<string[]>({ required: true });
 
@@ -59,7 +62,7 @@ function toggleFilteredItems() {
     v-model:search-term="searchTerm"
     multiple
     :items="items"
-    :placeholder="placeholder"
+    :placeholder="placeholderText"
     :search-input="false"
     :size="size"
     :virtualize="virtualize"
@@ -71,7 +74,7 @@ function toggleFilteredItems() {
             autofocus
             autocomplete="off"
             class="w-full"
-            :placeholder="searchPlaceholder"
+            :placeholder="searchPlaceholderText"
             :size="size"
             data-slot="input"
             variant="none"

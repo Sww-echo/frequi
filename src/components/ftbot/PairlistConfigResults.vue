@@ -52,7 +52,7 @@ watch(
       </div>
     </div>
     <div v-else>
-      <p>Evaluation returned 0 pairs</p>
+      <p>{{ $t('pairlist.evaluationEmpty') }}</p>
     </div>
   </div>
 </template>

@@ -45,15 +45,16 @@ const props = withDefaults(
   },
 );
 
+const { t } = useI18n();
+
 // Define Column labels here to avoid typos
 const CHART_PROFIT = computed(() =>
-  props.profitCol === 'abs_profit' ? 'Absolute profit' : 'Relative profit',
+  props.profitCol === 'abs_profit' ? t('chart.absoluteProfit') : t('chart.relativeProfit'),
 );
-const CHART_TRADE_COUNT = 'Trade Count';
+const CHART_TRADE_COUNT = t('chart.tradeCount');
 
 const settingsStore = useSettingsStore();
 const colorStore = useColorStore();
-
 const dailyChart = ref(null);
 
 const absoluteMin = computed(
@@ -101,7 +102,7 @@ const colorStops: LinearGradientObject = {
 const dailyChartOptions: ComputedRef<EChartsOption> = computed(() => {
   return {
     title: {
-      text: 'Daily profit',
+      text: t('chart.dailyProfit'),
       show: props.showTitle,
     },
     backgroundColor: 'rgba(0, 0, 0, 0)',

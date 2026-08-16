@@ -40,6 +40,6 @@ const sortedParamsBySpace = computed<Record<string, typeof props.strategy.params
     </div>
   </div>
   <div v-else class="p-4">
-    <p>This strategy has no parameters.</p>
+    <p>{{ $t('errors.noParameters') }}</p>
   </div>
 </template>

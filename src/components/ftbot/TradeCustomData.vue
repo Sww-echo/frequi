@@ -20,10 +20,10 @@ const { state: customData, execute } = useAsyncState(
         <ValuePair :description="y.key">{{ y.value }}</ValuePair>
       </template>
       <template v-if="x.custom_data.length === 0">
-        <p class="italic text-sm text-neutral-500">No custom data for this trade</p>
+        <p class="italic text-sm text-neutral-500">{{ $t('trade.customDataEmpty') }}</p>
       </template>
     </template>
 
-    <UButton @click="execute()" icon="mdi:reload" label="Reload Custom Data" class="mt-2" />
+    <UButton @click="execute()" icon="mdi:reload" :label="$t('trade.reloadCustomData')" class="mt-2" />
   </div>
 </template>

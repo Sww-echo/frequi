@@ -13,13 +13,14 @@ const props = withDefaults(
 const emit = defineEmits<{ 'trade-select': [trade: Trade] }>();
 
 const botStore = useBotStore();
+const { t } = useI18n();
 const selectedTrade = ref({} as Trade);
 const sortDescendingOrder = ref(true);
 const sortMethod = ref('openDate');
-const sortMethodOptions = [
-  { text: 'Open date', value: 'openDate' },
-  { text: 'Profit %', value: 'profit' },
-];
+const sortMethodOptions = computed(() => [
+  { text: t('trade.openDate'), value: 'openDate' },
+  { text: t('trade.profitPercent'), value: 'profit' },
+]);
 
 const onTradeSelect = (trade: Trade) => {
   selectedTrade.value = trade;
@@ -46,7 +47,7 @@ watch(
 <template>
   <div>
     <div class="flex justify-center">
-      <span class="me-2">Sort by:</span>
+      <span class="me-2">{{ $t('trade.sortBy') }}</span>
       <URadioGroup
         v-model="sortMethod"
         :items="sortMethodOptions.map((o) => ({ label: o.text, value: o.value }))"
@@ -60,10 +61,10 @@ watch(
         color="neutral"
         variant="ghost"
         class="w-full justify-center"
-        :title="'Trade Navigation'"
+        :title="$t('trade.navigation')"
         @click="sortDescendingOrder = !sortDescendingOrder"
         :trailing-icon="sortDescendingOrder ? 'mdi:arrow-down' : 'mdi:arrow-up'"
-        >Trade Navigation
+        >{{ $t('trade.navigation') }}
       </UButton>
       <li
         v-for="(trade, i) in sortedTrades"
@@ -112,7 +113,7 @@ watch(
           </div>
         </Transition>
       </li>
-      <div v-if="trades.length === 0">No trades to show...</div>
+      <div v-if="trades.length === 0">{{ $t('trade.noTrades') }}</div>
     </ul>
   </div>
 </template>

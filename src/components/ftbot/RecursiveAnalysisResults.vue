@@ -4,6 +4,7 @@ import type { RecursiveResult } from '@/types';
 const props = defineProps<{
   result: RecursiveResult;
 }>();
+const { t } = useI18n();
 
 // Indicators that show a difference for at least one startup candle count.
 const indicators = computed(() => Object.keys(props.result.results));
@@ -11,7 +12,7 @@ const indicators = computed(() => Object.keys(props.result.results));
 const candleColumns = computed(() => props.result.startup_candles ?? []);
 
 const tableColumns = computed(() => [
-  { accessorKey: 'indicator', header: 'Indicator', meta: { class: { td: 'font-mono' } } },
+  { accessorKey: 'indicator', header: t('analysis.indicator'), meta: { class: { td: 'font-mono' } } },
   ...candleColumns.value.map((c) => ({
     accessorKey: String(c),
     header: String(c),
@@ -26,9 +27,9 @@ const tableData = computed(() =>
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex flex-wrap gap-x-6 gap-y-1">
-      <span><span class="font-bold">Strategy:</span> {{ result.strategy }}</span>
+      <span><span class="font-bold">{{ $t('analysis.strategyLabel') }}</span> {{ result.strategy }}</span>
       <span>
-        <span class="font-bold">Recommended startup candle count:</span>
+        <span class="font-bold">{{ $t('analysis.recommendedStartup') }}</span>
         {{ result.strategy_scc }}
       </span>
     </div>
@@ -38,8 +39,8 @@ const tableData = computed(() =>
       color="success"
       class="py-2"
       icon="i-mdi-check-circle"
-      title="No recursive formula issues detected"
-      description="None of the strategy indicators changed when varying the startup candle count."
+      :title="$t('analysis.noRecursiveTitle')"
+      :description="$t('analysis.noRecursiveDescription')"
     />
 
     <div v-else class="overflow-x-auto">
@@ -47,9 +48,8 @@ const tableData = computed(() =>
         color="warning"
         class="mb-2 py-2"
         icon="i-mdi-alert"
-        :title="`${indicators.length} indicator(s) affected by startup candle count`"
-        description="The values below show the percentage difference compared to the analysis
-          with the most startup candles. Non-zero values indicate a recursive formula issue."
+        :title="$t('analysis.affectedIndicators', { count: indicators.length })"
+        :description="$t('analysis.recursiveResultHint')"
       />
       <UTable :data="tableData" :columns="tableColumns">
         <template v-for="c in candleColumns" #[`${c}-cell`]="{ row }" :key="c">

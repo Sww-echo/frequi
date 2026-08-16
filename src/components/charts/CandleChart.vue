@@ -66,6 +66,7 @@ const props = defineProps<{
   labelSide: 'left' | 'right';
   startCandleCount: number;
 }>();
+const { t } = useI18n();
 
 const isLabelLeft = computed(() => props.labelSide === 'left');
 // Chart default options
@@ -237,7 +238,7 @@ function updateChart(initial = false) {
 
     series: [
       {
-        name: 'Candles',
+        name: t('chart.candles'),
         type: 'candlestick',
         barWidth: '80%',
         itemStyle: {
@@ -253,7 +254,7 @@ function updateChart(initial = false) {
         },
       },
       {
-        name: 'Volume',
+        name: t('chart.volume'),
         type: 'bar',
         xAxisIndex: 1,
         yAxisIndex: 1,
@@ -345,7 +346,7 @@ function updateChart(initial = false) {
     const signalConfigs = [
       {
         colData: colEntryData,
-        name: 'Entry',
+        name: t('chart.entry'),
         symbol: 'triangle',
         symbolSize: 10,
         color: buySignalColor,
@@ -354,7 +355,7 @@ function updateChart(initial = false) {
       },
       {
         colData: colExitData,
-        name: 'Exit',
+        name: t('chart.exit'),
         symbol: 'diamond',
         symbolSize: 8,
         color: sellSignalColor,
@@ -363,7 +364,7 @@ function updateChart(initial = false) {
       },
       {
         colData: colShortEntryData,
-        name: 'Entry',
+        name: t('chart.entry'),
         symbol: 'triangle',
         symbolSize: 10,
         symbolRotate: 180,
@@ -373,7 +374,7 @@ function updateChart(initial = false) {
       },
       {
         colData: colShortExitData,
-        name: 'Exit',
+        name: t('chart.exit'),
         symbol: 'pin',
         symbolSize: 8,
         color: shortexitSignalColor,

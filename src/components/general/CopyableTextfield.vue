@@ -20,7 +20,7 @@ const { copy, isSupported, copied } = useClipboard();
       class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity hover:cursor-pointer flex dark:bg-neutral-700 bg-neutral-200 p-1 rounded-sm items-center justify-center flex-row gap-1"
       @click="copy(typeof content === 'string' ? content : JSON.stringify(content))"
     >
-      <span v-if="copied" class="text-sm">Copied!</span>
+      <span v-if="copied" class="text-sm">{{ $t('common.copied') }}</span>
       <UIcon
         :name="isSupported && copied ? 'mdi-check-circle' : 'mdi-content-copy'"
         v-if="isSupported && isValid"

@@ -3,6 +3,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import ui from '@nuxt/ui/vue-plugin';
 
 import App from './App.vue';
+import { i18n } from './locales';
 import { VueDraggableGrid } from './plugins/vue-grid-layout';
 import router from './router';
 import './styles/tailwind.css';
@@ -14,6 +15,7 @@ pinia.use(piniaPluginPersistedstate);
 myApp.use(pinia);
 
 myApp.use(ui);
+myApp.use(i18n);
 
 myApp.use(router);
 myApp.use(VueDraggableGrid);
