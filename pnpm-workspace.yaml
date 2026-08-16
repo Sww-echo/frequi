@@ -6,3 +6,8 @@ dangerouslyAllowAllBuilds: true
 onlyBuiltDependencies:
   - esbuild
   - vue-demi
+
+overrides:
+  "form-data@4": "^4.0.6"
+  "esbuild@0": "^0.28.1"
+  "brace-expansion@2": "^2.1.2"
